@@ -10,7 +10,7 @@ class extrae (  $unwind='',
 	$CFLAGS="-O3 -funwind-tables -g"
 	$sourcePath = "/usr/src/extrae-3.1.0"
 	file{"$sourcePath":
-		ensure => folder
+		ensure => directory,
 	}
 	file{"/tmp/extrae-3.1.0.tar.bz2":
 		ensure => file,
