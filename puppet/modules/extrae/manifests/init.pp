@@ -23,6 +23,7 @@ class extrae (  $unwind='',
 		command => 'tar xf /tmp/extrae-3.1.0.tar.bz2',
 		path    => '/bin:/usr/bin',
 		cwd     => "/usr/src",
+		creates => "/usr/src/extrae-3.1.0",
 		require => File["$sourcePath"]
 	}->
 	build_source::install{"extrae":
