@@ -10,10 +10,10 @@ define build_source::git(
 	}
 	if ($dest == '') {
 		if ($version == '') {
-			$gitDest=$name
+			$gitDest="/usr/src/$name"
 		}
 		else {
-			$gitDest="${name}/${version}"
+			$gitDest="/usr/src/${name}/${version}"
 		}	
 	}
 	else {
@@ -21,7 +21,6 @@ define build_source::git(
 	}
 	exec { "Clone $title":
        		command => "git clone $url $gitDest",
-		cwd => "/usr/src",
-		creates => "/usr/src/$gitDest",
+		creates => $gitDest,
 	}
 }

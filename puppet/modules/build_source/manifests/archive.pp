@@ -1,8 +1,8 @@
 define build_source::archive(
 	$url,
-	$name,
 	$version = '',
 	$dest = '', 
+	$extension = 'tar.gz', 
 ) {
 	Exec {
 		user    => 'root',
@@ -11,22 +11,27 @@ define build_source::archive(
 	}
 	if ($dest == '') {
 		if ($version == '') {
-			$archiveDest=$name
+			$archiveDest="/usr/src/$name"
 		}
 		else {
-			$archiveDest="${name}/${version}"
+			$archiveDest="/usr/src/${name}/${version}"
 		}	
 	}
 	else {
 		$archiveDest=$dest
 	}
+	file { "$archiveDest":
+		ensure => directory,
+		owner => 'root',
+		group => 'root',
+	}
 	exec { "Download $title":
-		command => "wget $url -O $archiveDest",
-		cwd => "/tmp/${archiveDest}.${extension}"
+		command => "wget $url -O $name.${extension}",
+		cwd => "/tmp",
+		creates => "/tmp/$name.${extension}" 
 	}->
 	exec { "Extract $title":
-       		command => "tar xf /tmp/${archiveDest}.${extension}",
-		cwd => "/usr/src",
-		creates => "/usr/src/$gitDest",
+       		command => "tar xf /tmp/$name.${extension}",
+		cwd => "$archiveDest",
 	}
 }

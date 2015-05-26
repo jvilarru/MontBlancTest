@@ -2,6 +2,7 @@ define build_source::install(
 	$sourceFolder, 
 	$dest = "/opt/$name", 
 	$options = '', 
+	$environment = '',
 	$timeout = '0', 
 ) {
 	Exec {
@@ -9,6 +10,7 @@ define build_source::install(
 		timeout => $timeout,
 		path    => '/usr/bin:/bin',
 		cwd => "$sourceFolder",
+		environment => $environment,
 	}
 	exec { "./configure for $title":
 		command => "$sourceFolder/configure ${options} --prefix=$dest",

@@ -1,10 +1,14 @@
+class test($env){
+	exec { 'foo':
+ 		environment => $env,
+		command => '/bin/echo CFLAGS=$CFLAGS CXXFLAGS=$CXXFLAGS FCFLAGS=$FCFLAGS > /tmp/bar'
+	}
+}
 node 'xubuntu-1404' {
 	include build_source
-	build_source::install {"fftw":
-		url => "https://github.com/FFTW/fftw3.git",
+	$CFLAGS="-O3 -mcpu=$processor0 -mtune=$processor0 -mfloat-abi=hard -mfpu=$architecture"
+	class{"test":
+		env => ["CFLAGS=\"$CFLAGS\"","CXXFLAGS=\"$CFLAGS\"","FCFLAGS=\"-O3\""]
 	}
-#	build_source::git {"fftw":
-#		url => "https://github.com/FFTW/fftw3.git",
-#		version => "3"
-#	}
+	include ompss
 }
