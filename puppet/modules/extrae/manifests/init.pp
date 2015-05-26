@@ -1,3 +1,4 @@
+#dependences = binutils-dev, libxml2-dev gfortran
 class extrae (  $unwind='',
 		$papi='',
 		$mpi='',
