@@ -12,6 +12,9 @@ class extrae (  $unwind='',
 		''      => "/usr/src/extrae/3.1.0",
 		default => "/usr/src/extrae/3.1.0/$ver"
 	}
+	file{"$sourcePath":
+		ensure => folder
+	}
 	file{"/tmp/extrae-3.1.0.tar.bz2":
 		ensure => file,
 		source => 'puppet:///modules/extrae/extrae-3.1.0.tar.bz2',
