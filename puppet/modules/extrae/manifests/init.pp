@@ -9,12 +9,6 @@ class extrae (  $unwind='',
 	#$CFLAGS="-O3 -mcpu=$cortex_cpu -mtune=$cortex_cpu -mfpu=$fpu -funwind-tables -g"
 	$CFLAGS="-O3 -funwind-tables -g"
 	$sourcePath = "/usr/src/extrae-3.1.0"
-	file{"$sourcePath":
-		ensure => directory,
-		owner  => 'root',
-		group  => 'root',
-		mode   => '755'
-	}
 	file{"/tmp/extrae-3.1.0.tar.bz2":
 		ensure => file,
 		source => 'puppet:///modules/extrae/extrae-3.1.0.tar.bz2',
