@@ -9,7 +9,7 @@ class extrae (  $unwind='',
 	#$CFLAGS="-O3 -mcpu=$cortex_cpu -mtune=$cortex_cpu -mfpu=$fpu -funwind-tables -g"
 	$CFLAGS="-O3 -funwind-tables -g"
 	$sourcePath = $ver ? {
-		''      => "/usr/src/extrae/3.1.0"
+		''      => "/usr/src/extrae/3.1.0",
 		default => "/usr/src/extrae/3.1.0/$ver"
 	}
 	file{"/tmp/extrae-3.1.0.tar.bz2":
