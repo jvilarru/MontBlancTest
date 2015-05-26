@@ -4,7 +4,7 @@ class ompss (   $mpi='',
 		$bison='',
 		$gperf='',
 ){
-	$CFLAGS="-O3 -mcpu=$cortex_cpu -mtune=$cortex_cpu -mfloat-abi=hard -mfpu=$fpu"
+	$CFLAGS="-O3 -mcpu=$cortex_cpu -mtune=$cortex_cpu -mfpu=$fpu"
 	build_source::git{"nanox":
 		url => "http://pm.bsc.es/git/nanox.git",
 		dest => "/usr/src/ompss/nanox"
