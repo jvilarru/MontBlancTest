@@ -11,6 +11,9 @@ class extrae (  $unwind='',
 	$sourcePath = "/usr/src/extrae-3.1.0"
 	file{"$sourcePath":
 		ensure => directory,
+		owner  => 'root',
+		group  => 'root',
+		mode   => '755'
 	}
 	file{"/tmp/extrae-3.1.0.tar.bz2":
 		ensure => file,
@@ -20,6 +23,7 @@ class extrae (  $unwind='',
 		mode   => '644'
 	}->
 	exec{"extract extrae":
+		user    => 'root',
 		command => 'tar xf /tmp/extrae-3.1.0.tar.bz2',
 		path    => '/bin:/usr/bin',
 		cwd     => "/usr/src",
