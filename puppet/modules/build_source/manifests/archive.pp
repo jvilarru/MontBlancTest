@@ -2,8 +2,8 @@ define build_source::archive(
 	$url,
 	$version = '',
 	$dest = '', 
-	$extension = 'tar.gz', 
 ) {
+	require build_source
 	Exec {
 		user    => 'root',
 		timeout => $timeout,
@@ -14,6 +14,11 @@ define build_source::archive(
 			$archiveDest="/usr/src/$name"
 		}
 		else {
+			file {"/usr/src/$name":
+				ensure => directory,
+				owner  => 'root',
+				group  => 'root',
+			}
 			$archiveDest="/usr/src/${name}/${version}"
 		}	
 	}
@@ -44,7 +49,9 @@ define build_source::archive(
 
 	}
 	exec { "Extract $title":
-       		command => "tar xf /tmp/$name.${extension}",
-		cwd => "$archiveDest",
+       		command => "/usr/local/bin/extract.pl /tmp/$name.${extension}",
+		cwd            => "$archiveDest",
+		require        => File['build_source extractor'],
+		notify         => Exec ["Remove extracted $title"]
 	}
 }

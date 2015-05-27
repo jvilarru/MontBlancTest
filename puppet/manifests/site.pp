@@ -3,16 +3,15 @@ node 'xubuntu-1404' {
 	#include ompss
 	#	class{"extrae":
 	#}
-	archive { 'fftw':
-		ensure => present,
-		url    => "http://www.fftw.org/fftw-3.3.4.tar.gz",
-		target => "/tmp"
-	}	
 }
 node 'laptop' {
-	include stdlib
-	include build_source
-	class{"extrae":
-	}
+	#	include stdlib
+	#	include build_source
+	#	class{"extrae":
+	#	}
 #	include ompss
+	build_source::archive{ "fftw":
+		url     => "http://www.fftw.org/fftw-3.3.4.tar.gz",
+		version => '3.3.4'
+	}
 }
