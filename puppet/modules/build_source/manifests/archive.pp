@@ -4,6 +4,7 @@ define build_source::archive(
 	$dest = '', 
 ) {
 	require build_source
+	$filename = inline_template('<%= File.basename(@url) %>')
 	Exec {
 		user    => 'root',
 		timeout => $timeout,
@@ -31,7 +32,7 @@ define build_source::archive(
 		group => 'root',
 	}
 	if ($url =~ /^puppet/) {
-		file {"/tmp/$name.${extension}":
+		file {"/tmp/$filename":
 			ensure => file,
 			source => $url,
 			owner  => 'root',
@@ -41,17 +42,17 @@ define build_source::archive(
 	}
 	else{
 		exec { "Download $title":
-			command => "wget $url -O $name.${extension}",
+			command => "wget $url -O $filename",
 			cwd => "/tmp",
-			creates => "/tmp/$name.${extension}",
+			creates => "/tmp/$filename",
 			before => Exec["Extract $title"]
 		}
 
 	}
 	exec { "Extract $title":
-       		command => "/usr/local/bin/extract.pl /tmp/$name.${extension}",
-		cwd            => "$archiveDest",
-		require        => File['build_source extractor'],
-		notify         => Exec ["Remove extracted $title"]
+       		command => "/usr/local/bin/extract.pl /tmp/$filename",
+		cwd     => "$archiveDest",
+		creates => "$archiveDest/configure",
+		require => File['build_source extractor'],
 	}
 }

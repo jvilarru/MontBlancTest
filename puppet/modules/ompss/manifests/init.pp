@@ -13,14 +13,14 @@ class ompss (   $mpi='',
 		url => "http://pm.bsc.es/git/mcxx.git",
 		dest => "/usr/src/ompss/mcxx"
 	}
-	build_source::install{"nanox":
+	build_source::compile{"nanox":
 		sourceFolder => "/usr/src/ompss/nanox",
 		dest => "/opt/ompss/nanox",
 		environment => ["CFLAGS=\"$CFLAGS\"","CXXFLAGS=\"$CFLAGS\"","FCFLAGS=\"-O3\""],
 		options => "",
 		require => Build_source::Git["nanox"]
 	}->
-	build_source::install{"mcxx":
+	build_source::compile{"mcxx":
 		sourceFolder => "/usr/src/ompss/mcxx",
 		dest => "/opt/ompss/mcxx",
 		environment => ["CFLAGS=\"$CFLAGS\"","CXXFLAGS=\"$CFLAGS\"","FCFLAGS=\"-O3\""],

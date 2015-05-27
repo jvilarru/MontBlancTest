@@ -7,7 +7,6 @@ sub extract {
 	else{
 		`tar xf $file --strip-components 1`;
 	}
-	`cd /tmp; tar xf $file`;
 }
 @res = `tar --exclude="*/*" -tf $file`;
 foreach $line(@res) {
