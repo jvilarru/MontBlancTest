@@ -12,15 +12,17 @@ define build_source::compile(
 		}
 	}
 	Exec {
-		user    => 'root',
-		timeout => $timeout,
-		path    => '/usr/bin:/bin',
-		cwd => "$sourceFolder",
+		user     => 'root',
+		group    => 'root',
+		timeout  => $timeout,
+		provider => "shell",
+		path     => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games',
+		cwd      => "$sourceFolder",
 	}
-	notify {"$sourceFolder/configure ${options} --prefix=$dest":}
 	exec { "./configure for $title":
-		command => "$sourceFolder/configure ${options} --prefix=$dest",
-		creates => "$dest"
+		command   => "$sourceFolder/configure ${options} --prefix=$dest",
+		logoutput => 'on_failure',
+		creates   => "$dest"
 	} ->
 	
 	exec { "make for $title":
