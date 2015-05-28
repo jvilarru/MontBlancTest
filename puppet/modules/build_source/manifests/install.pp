@@ -4,7 +4,11 @@ define build_source::install (  $url,
 				$version='',
 				$srcDest='',
 				$dest='',
+				$dependences='',
 ){
+	package{$dependences:
+		ensure => latest
+	}
 	if($srcDest == ''){
 		if($version == ''){
 			$sourceFolder = "/usr/src/$name"
