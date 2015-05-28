@@ -1,5 +1,6 @@
-#dependences = binutils-dev, libxml2-dev gfortran
 class test {
-	$test = getTarNumFiles("/tmp/test2.tar.gz")
-	notify{"$test":}
+	exec {"test":
+		environment => ["TEST=test spaces"],
+		command     => "/usr/bin/env > /tmp/test"
+	}
 }
