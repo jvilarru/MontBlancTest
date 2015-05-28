@@ -6,8 +6,11 @@ define build_source::install (  $url,
 				$dest='',
 				$dependences='',
 ){
-	package{$dependences:
-		ensure => latest
+	if($dependences!=''){
+		package{$dependences:
+			ensure => latest,
+			before => Build_source::Archive["$title"]
+		}
 	}
 	if($srcDest == ''){
 		if($version == ''){

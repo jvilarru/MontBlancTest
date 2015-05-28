@@ -12,7 +12,8 @@ class extrae (  $unwind='',
 		url         => "puppet:///modules/extrae/extrae-3.1.0.tar.bz2",
 		environment => ["CFLAGS=$CFLAGS","CXXFLAGS=$CFLAGS","FCFLAGS=-O3"],
 		options     => template("extrae/options.erb"),
-		version     => "3.1.0"
+		version     => "3.1.0",
+		dependences => ["gfortran","libxml2-dev","binutils-dev","libiberty-dev"]
 	}
 
 }
