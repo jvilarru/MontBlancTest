@@ -57,9 +57,10 @@ define build_source::install (  $url,
 		$requirement="Build_source::Git"
 	} else {
 		build_source::archive{"$title":
-			url    => $url,
-			dest   => $_sourceFolder,
-			before => Build_source::Compile["$title"]
+			url          => $url,
+			dest         => $_sourceFolder,
+			configureAdd => $configureLocation,
+			before       => Build_source::Compile["$title"]
 		}
 		$requirement="Build_source::Git"
 
