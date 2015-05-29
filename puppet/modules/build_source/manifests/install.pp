@@ -4,8 +4,8 @@ define build_source::install (  $url,
 				$version='',
 				$srcDest='',
 				$dest='',
-				$workDir='',
-				$prefixConfigure='',
+				$buildDir='',
+				$configureLocation='',
 				$preConfigure='',
 				$postConfigure='',
 				$dependences='',
@@ -17,7 +17,7 @@ define build_source::install (  $url,
 	}
 	if($srcDest == ''){
 		if($version == ''){
-			$sourceFolder = "/usr/src/$name"
+			$_sourceFolder = "/usr/src/$name"
 		}
 		else {
 			file {"/usr/src/$name":
@@ -25,11 +25,16 @@ define build_source::install (  $url,
 				owner  => 'root',
 				group  => 'root',
 			}
-			$sourceFolder = "/usr/src/$name/$version"
+			$_sourceFolder = "/usr/src/$name/$version"
 		}
 	}
 	else {
-		$sourceFolder = $srcDest
+		$_sourceFolder = $srcDest
+	}
+	if($configureLocation == ''){
+		$sourceFolder = $_sourceFolder
+	} else {
+		$sourceFolder = "$_sourceFolder/$configureLocation"
 	}
 	if($dest == ''){
 		if($version == ''){
@@ -42,47 +47,43 @@ define build_source::install (  $url,
 	else {
 		$destFolder = $dest
 	}
+	$extension = inline_template('<%= File.extname(@url) %>')
+	if($extension == ".git"){
+		build_source::git{"$title":
+			url    => $url,
+			dest   => $_sourceFolder,
+			before => Build_source::Compile["$title"]
+		}
+		$requirement="Build_source::Git"
+	} else {
+		build_source::archive{"$title":
+			url    => $url,
+			dest   => $_sourceFolder,
+			before => Build_source::Compile["$title"]
+		}
+		$requirement="Build_source::Git"
+
+	}
 	if ($preConfigure!=''){
 		exec {"preconfigure of $title":
 			command => $preConfigure,
 			path    => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games',
 			user    => 'root',
 			group   => 'root',
-			cwd     => "$sourceFolder",
+			cwd     => $sourceFolder,
 			creates => $destFolder,
 			before  => Build_source::Compile["$title"],
-			require => Build_source::Archive["$title"]
-			#AIXO DE ADALT DEPEN DEL IF de git
+			require => $requirement["$title"]
+			#AIXO DE ADALT NI PUTA IDEA SI FUNCARA
 		}
-	}
-	$extension = inline_template('<%= File.extname(@url) %>')
-	if($extension == ".git"){
-		build_source::git{"$title":
-			url    => $url,
-			dest   => $sourceFolder,
-			before => Build_source::Compile["$title"]
-		}
-
-	} else {
-		build_source::archive{"$title":
-			url    => $url,
-			dest   => $sourceFolder,
-			before => Build_source::Compile["$title"]
-		}
-
-	}
-	if($prefixConfigure!=''){
-		$realSourceFolder="$sourceFolder/$prefixConfigure"
-	} else {
-		$realSourceFolder=$sourceFolder
 	}
 	build_source::compile{"$title":
-		sourceFolder  => $realSourceFolder,
-		environment   => $environment,
-		postConfigure => $postConfigure,
-		workDir       => $workDir,
-		options       => $options,
-		dest          => $destFolder
+		sourceFolder      => $sourceFolder,
+		environment       => $environment,
+		postConfigure     => $postConfigure,
+		buildDir          => $buildDir,
+		options           => $options,
+		dest              => $destFolder
 	}
 
 }

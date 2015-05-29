@@ -4,7 +4,7 @@ define build_source::compile(
 	$options = '', 
 	$environment = '',
 	$postConfigure = '',
-	$workDir = '',
+	$buildDir = '',
 	$timeout = '0', 
 ) {
 	if ($environment != '') {
@@ -12,25 +12,25 @@ define build_source::compile(
 			environment => $environment
 		}
 	}
-	if ($workDir != '') {
-		$realWorkDir="$sourceFolder/$workDir"
-		file {$realWorkDir:
+	if ($buildDir != '') {
+		$workDir="$sourceFolder/$buildDir"
+		file {$workDir:
 			ensure => directory,
 			owner  => 'root',
 			group  => 'root',
 		}
 	} else {
-		$realWorkDir="$sourceFolder"
+		$workDir="$sourceFolder"
 	}
 	Exec {
 		user     => 'root',
 		group    => 'root',
 		timeout  => $timeout,
 		path     => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games',
-		cwd      => "$realWorkDir",
+		cwd      => "$workDir",
 	}
 	exec { "./configure for $title":
-		command   => "$sourceFolder/configure ${options} --prefix=$dest",
+		command   => "$sourceFolder/configure --prefix=$dest $options",
 		logoutput => 'on_failure',
 		creates   => "$dest",
 		require   => Class['build_source']
