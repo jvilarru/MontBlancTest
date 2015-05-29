@@ -7,15 +7,9 @@ class test {
 	include openmpi
 	include papi
 	include hdf5
-}
-node 'xubuntu-1404' {
-	include test
-}
-node 'laptop' {
-	include test
+	include boost
+	include lapack
 }
 node default {
 	include test
-	include boost
-	include lapack
 }

@@ -54,7 +54,7 @@ define build_source::install (  $url,
 			dest   => $_sourceFolder,
 			before => Build_source::Compile["$title"]
 		}
-		$requirement="Build_source::Git"
+		$requirement=Build_source::Git["$title"]
 	} else {
 		build_source::archive{"$title":
 			url          => $url,
@@ -62,7 +62,7 @@ define build_source::install (  $url,
 			configureAdd => $configureLocation,
 			before       => Build_source::Compile["$title"]
 		}
-		$requirement="Build_source::Git"
+		$requirement=Build_source::Archive["$title"]
 
 	}
 	if ($preConfigure!=''){
@@ -74,8 +74,7 @@ define build_source::install (  $url,
 			cwd     => $sourceFolder,
 			creates => $destFolder,
 			before  => Build_source::Compile["$title"],
-			require => $requirement["$title"]
-			#AIXO DE ADALT NI PUTA IDEA SI FUNCARA
+			require => $requirement
 		}
 	}
 	build_source::compile{"$title":

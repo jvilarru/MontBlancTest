@@ -58,7 +58,7 @@ define build_source::archive(
 	exec { "Extract $title":
        		command => "/usr/local/bin/extract.pl /tmp/$filename",
 		cwd     => "$archiveDest",
-		creates => "$_creates/$configure",
+		creates => "$_creates/$creates",
 		require => File['build_source extractor'],
 	}
 }
