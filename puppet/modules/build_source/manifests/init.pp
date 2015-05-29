@@ -1,5 +1,5 @@
 class build_source (){
-	$dependences = ['gcc','make']
+	$dependences = ['gcc','make','g++']
 	package { $dependences:
 		ensure => latest,
 	}
