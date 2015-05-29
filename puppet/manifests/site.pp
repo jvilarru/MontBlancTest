@@ -1,6 +1,6 @@
 class test {
 	build_source::install{ "fftw":
-	        url     => "http://www.fftw.org/fftw-3.3.4.tar.gz",
+	        url     => "https://github.com/FFTW/fftw3.git",
 	}
 	include extrae
 }

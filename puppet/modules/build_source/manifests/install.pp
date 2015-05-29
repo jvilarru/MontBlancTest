@@ -58,10 +58,22 @@ define build_source::install (  $url,
 			require => Build_source::Archive["$title"]
 		}
 	}
-	build_source::archive{"$title":
-		url    => $url,
-		dest   => $sourceFolder,
-	}->
+	$extension = inline_template('<%= File.extname(@url) %>')
+	if($extension == ".git"){
+		build_source::git{"$title":
+			url    => $url,
+			dest   => $sourceFolder,
+			before => Build_source::Compile["$title"]
+		}
+
+	} else {
+		build_source::archive{"$title":
+			url    => $url,
+			dest   => $sourceFolder,
+			before => Build_source::Compile["$title"]
+		}
+
+	}
 	build_source::compile{"$title":
 		sourceFolder  => $sourceFolder,
 		environment   => $environment,
