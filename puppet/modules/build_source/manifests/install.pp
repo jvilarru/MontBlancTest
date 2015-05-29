@@ -5,6 +5,7 @@ define build_source::install (  $url,
 				$srcDest='',
 				$dest='',
 				$workDir='',
+				$prefixConfigure='',
 				$preConfigure='',
 				$postConfigure='',
 				$dependences='',
@@ -70,8 +71,13 @@ define build_source::install (  $url,
 		}
 
 	}
+	if($prefixConfigure!=''){
+		$realSourceFolder="$sourceFolder/$prefixConfigure"
+	} else {
+		$realSourceFolder=$sourceFolder
+	}
 	build_source::compile{"$title":
-		sourceFolder  => $sourceFolder,
+		sourceFolder  => $realSourceFolder,
 		environment   => $environment,
 		postConfigure => $postConfigure,
 		workDir       => $workDir,
