@@ -26,7 +26,7 @@ define build_source::compile(
 	} ->
 	
 	exec { "make for $title":
-		command => 'make -j',
+		command => 'make',
 		creates => "$dest",
 		require   => Class['build_source']
 	} ->
