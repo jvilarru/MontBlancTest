@@ -17,4 +17,5 @@ node 'laptop' {
 node default {
 	include test
 	include boost
+	include lapack
 }
