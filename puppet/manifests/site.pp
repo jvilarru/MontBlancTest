@@ -5,6 +5,8 @@ class test {
 	include extrae
 	include mpich
 	include openmpi
+	include papi
+	include hdf5
 }
 node 'xubuntu-1404' {
 	include test
