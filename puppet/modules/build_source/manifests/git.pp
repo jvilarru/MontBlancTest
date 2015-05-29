@@ -19,6 +19,7 @@ define build_source::git(
 	else {
 		$gitDest=$dest
 	}
+	notify{"git clone":}
 	exec { "Clone $title":
        		command => "git clone $url $gitDest",
 		creates => $gitDest,
