@@ -1,21 +1,22 @@
 class boost {
-	$VERSION="1.58.0"
-	$PREFIX="/opt/boost"
-	$URL="http://sourceforge.net/projects/boost/files/boost/1.58.0/boost_1_58_0.tar.gz"
-	exec { "wget $URL -O /usr/src/boost.tar.gz":
-		creates => "/usr/src/boost.tar.gz",
-		path    => ["/bin","/usr/bin"],
+	$version = "1.58.0"
+	$srcDest = "/usr/src/$module_name/$version"
+	$dest = "/opt/$module_name/$version"
+	Exec {
+                user    => 'root',
+                timeout => 0,
+		path    => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games',
+		cwd     => $srcDest
+        }	
+	build_source::archive{"$module_name":
+		url     => "http://sourceforge.net/projects/boost/files/boost/1.58.0/boost_1_58_0.tar.gz",
+		version => $version,
+		creates => "bootstrap.sh"
 	}->
-	exec { "tar xf /usr/src/boost.tar.gz -C /usr/src":
-		creates => "/usr/src/boost_1_58_0",
-		path    => ["/bin","/usr/bin"],
+	exec { "$module_name bootstrap":
+		command => "$srcDest/bootstrap.sh --prefix=$dest":
 	}->
-	exec { "/usr/src/boost_1_58_0/bootstrap.sh --prefix=$PREFIX/$VERSION":
-		path    => ["/bin","/usr/bin","/usr/local/bin","/sbin","/usr/sbin","/usr/local/sbin"],
-		cwd     => "/usr/src/boost_1_58_0",
-	}->
-	exec { "/usr/src/boost_1_58_0/b2 install":
-		path    => ["/bin","/usr/bin","/usr/local/bin","/sbin","/usr/sbin","/usr/local/sbin"],
-		cwd     => "/usr/src/boost_1_58_0",
+	exec { "$module_name install":
+		command => "$srcDest/b2 install":
 	}
 }
