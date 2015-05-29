@@ -14,7 +14,6 @@ class extrae (  $unwind='',
 		options      => template("extrae/options.erb"),
 		version      => "3.1.0",
 		postConfigure => "echo test > /tmp/test",
-		dependences  => ["gfortran","libxml2-dev","binutils-dev","libiberty-dev"]
+		dependences => ["gfortran","libxml2-dev","binutils-dev","libiberty-dev","dpkg-dev"]
 	}
-
 }

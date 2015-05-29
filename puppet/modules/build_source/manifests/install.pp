@@ -1,23 +1,17 @@
-define safeInstall {
-	unless defined(Package["$name"]) {
-		 package{$name:
-			ensure =>latest
-		 }
-	}
-}
-
 define build_source::install (  $url,
 				$environment='',
 				$options='',
 				$version='',
 				$srcDest='',
 				$dest='',
-				$dependences='',
 				$preConfigure='',
 				$postConfigure='',
+				$dependences='',
 ){
-	if($dependences!=''){
-		safeInstall{ $dependences:}
+	require stdlib
+	if ($dependences!='') {
+		ensure_packages($dependences)
+		Package[$dependences] -> Build_source::Compile["$title"]
 	}
 	if($srcDest == ''){
 		if($version == ''){
@@ -56,6 +50,7 @@ define build_source::install (  $url,
 			creates => $destFolder,
 			before  => Build_source::Compile["$title"],
 			require => Build_source::Archive["$title"]
+			#AIXO DE ADALT DEPEN DEL IF de git
 		}
 	}
 	$extension = inline_template('<%= File.extname(@url) %>')

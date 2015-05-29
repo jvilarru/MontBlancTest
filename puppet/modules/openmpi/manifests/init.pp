@@ -10,5 +10,4 @@ class openmpi (  $slurm=''
 		version      => "1.8.3",
 		dependences  => ["gfortran","libhwloc-dev"]
 	}
-
 }

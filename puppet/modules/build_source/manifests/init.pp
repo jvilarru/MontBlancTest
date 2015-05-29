@@ -1,8 +1,7 @@
 class build_source (){
+	require stdlib
 	$dependences = ['gcc','make','g++']
-	package { $dependences:
-		ensure => latest,
-	}
+	ensure_packages($dependences)
 	file {"build_source extractor":
 		path   => '/usr/local/bin/extract.pl',
 		ensure => file,
