@@ -23,15 +23,10 @@ define build_source::compile(
 
 	if ($buildDir != '') {
 		$workDir="$sourceFolder/$buildDir"
-		file {$workDir:
-			ensure => directory,
-			owner  => 'root',
-			group  => 'root',
-		}
 	} else {
 		$workDir="$sourceFolder"
 	}
-
+	ensure_resource('file',$workDir,{'ensure' => 'directory','owner'=>'root','group'=>'root'})
 	Exec {
 		user     => 'root',
 		group    => 'root',

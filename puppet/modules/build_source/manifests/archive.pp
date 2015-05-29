@@ -17,11 +17,6 @@ define build_source::archive(
 			$archiveDest="/usr/src/$name"
 		}
 		else {
-			file {"/usr/src/$name":
-				ensure => directory,
-				owner  => 'root',
-				group  => 'root',
-			}
 			$archiveDest="/usr/src/${name}/${version}"
 		}	
 	}
@@ -33,11 +28,10 @@ define build_source::archive(
 	} else {
 		$_creates = "$archiveDest/$configureAdd"
 	}
-	file { "$archiveDest":
-		ensure => directory,
-		owner => 'root',
-		group => 'root',
-	}
+	
+	$pathComplet = getPaths($archiveDest)
+	ensure_resource('file',$pathComplet,{'ensure' => 'directory','owner' => 'root', 'group' => 'root'})
+	
 	if ($url =~ /^http(s)?:\/\// or $url =~ /^ftp:\/\//) {
 		exec { "Download $title":
 			command => "wget $url -O $filename",
@@ -59,6 +53,6 @@ define build_source::archive(
        		command => "/usr/local/bin/extract.pl /tmp/$filename",
 		cwd     => "$archiveDest",
 		creates => "$_creates/$creates",
-		require => File['/usr/local/bin/extract.pl'],
+		require => [File['/usr/local/bin/extract.pl'],File[$pathComplet]]
 	}
 }

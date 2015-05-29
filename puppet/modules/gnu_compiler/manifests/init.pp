@@ -43,7 +43,8 @@ class gnu_compiler {
 		environment  => ["CFLAGS=$CFLAGS_ISL"],
 		options      => template("$module_name/options_isl.erb"),
 		dest 		=> $ISL_DEST,
-		require     =>  Build_source::Install["mpc"]
+		require     =>  Build_source::Install["mpc"],
+		dependences => ["llvm-dev","clang","libclang-dev"]
 	}
 	#CLOOG
 	$CFLAGS_CLOOG="-O3 -fPIC"

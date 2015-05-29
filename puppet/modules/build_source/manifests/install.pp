@@ -4,6 +4,7 @@ define build_source::install (  $url,
 				$version='',
 				$srcDest='',
 				$dest='',
+				$defaultPrefix='/opt',
 				$buildDir='',
 				$configureLocation='',
 				$preConfigure='',
@@ -15,11 +16,6 @@ define build_source::install (  $url,
 			$_sourceFolder = "/usr/src/$name"
 		}
 		else {
-			file {"/usr/src/$name":
-				ensure => directory,
-				owner  => 'root',
-				group  => 'root',
-			}
 			$_sourceFolder = "/usr/src/$name/$version"
 		}
 	}
@@ -35,10 +31,10 @@ define build_source::install (  $url,
 
 	if($dest == ''){
 		if($version == ''){
-			$destFolder = "/opt/$name"
+			$destFolder = "/$defaultPrefix/$name"
 		}
 		else {
-			$destFolder = "/opt/$name/$version"
+			$destFolder = "/$defaultPrefix/$name/$version"
 		}
 	}
 	else {
