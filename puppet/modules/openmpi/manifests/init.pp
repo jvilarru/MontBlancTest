@@ -8,7 +8,7 @@ class openmpi (  $slurm=''
 		environment  => ["CFLAGS=$CFLAGS","CXXFLAGS=$CFLAGS","FCFLAGS=$FCFLAGS"],
 		options      => template("openmpi/options.erb"),
 		version      => "1.8.3",
-		dependences  => ["gfortran","g++","libhwloc-dev"]
+		dependences  => ["gfortran","libhwloc-dev"]
 	}
 
 }

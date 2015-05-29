@@ -10,6 +10,6 @@ class mpich (  $blcr='',
 		environment  => ["CFLAGS=$CFLAGS","CXXFLAGS=$CFLAGS","FCFLAGS=$FCFLAGS","FFLAGS=$FFLAGS"],
 		options      => template("mpich/options.erb"),
 		version      => "3.1.4",
-		dependences  => ["gfortran","g++","libcr-dev"]
+		dependences  => ["gfortran","libcr-dev"]
 	}
 }
