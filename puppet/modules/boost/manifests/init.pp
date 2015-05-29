@@ -10,11 +10,11 @@ class boost {
 		creates => "/usr/src/boost_1_58_0",
 		path    => ["/bin","/usr/bin"],
 	}->
-	exec { "./bootstrap.sh --prefix=$PREFIX/$VERSION":
+	exec { "/usr/src/boost_1_58_0/bootstrap.sh --prefix=$PREFIX/$VERSION":
 		path    => ["/bin","/usr/bin","/usr/local/bin","/sbin","/usr/sbin","/usr/local/sbin"],
 		cwd     => "/usr/src/boost_1_58_0",
 	}->
-	exec { "./b2 install":
+	exec { "/usr/src/boost_1_58_0/b2 install":
 		path    => ["/bin","/usr/bin","/usr/local/bin","/sbin","/usr/sbin","/usr/local/sbin"],
 		cwd     => "/usr/src/boost_1_58_0",
 	}
