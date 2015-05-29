@@ -6,6 +6,5 @@ class papi{
 		environment  => ["CFLAGS=$CFLAGS","FFLAGS=$FFLAGS"],
 		options      => template("extrae/options.erb"),
 		version      => "5.4.1",
-		preConfigure => "cd src",
 	}
 }
