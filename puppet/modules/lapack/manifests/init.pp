@@ -1,28 +1,26 @@
 class lapack {
-	$VERSION="3.5.0"
-	$PREFIX="/opt/lapack"
-	$URL="http://www.netlib.org/lapack/lapack-3.5.0.tgz"
-	package { "cmake":
-		ensure  => latest,
+	$version = "3.5.0"
+	$srcDest = "/usr/src/$module_name/$version"
+	$dest = "/opt/$module_name/$version"
+	ensure_package(["cmake"])
+	Exec {
+                user    => 'root',
+                timeout => 0,
+                path    => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games',
+                cwd     => $srcDest
+        }
+	build_source::archive{"$module_name":
+		url     => "http://www.netlib.org/lapack/lapack-3.5.0.tgz",
+		version => $version
+	}
+	exec { "cmake $module_name":
+		command =>"cmake -D CMAKE_INSTALL_PREFIX=$dest $srcDest",
+		require => Package['cmake']
 	}->
-	exec { "wget $URL -O /usr/src/lapack.tar.gz":
-		creates => "/usr/src/lapack.tar.gz",
-		path    => ["/bin","/usr/bin"],
+	exec { "make $module_name":
+		command => "make"
 	}->
-	exec { "tar xf /usr/src/lapack.tar.gz -C /usr/src":
-		creates => "/usr/src/lapack-3.5.0",
-		path    => ["/bin","/usr/bin"],
-	}->
-	exec { "cmake -D CMAKE_INSTALL_PREFIX=$PREFIX/$VERSION /usr/src/lapack-3.5.0":
-		path    => ["/bin","/usr/bin","/usr/local/bin","/sbin","/usr/sbin","/usr/local/sbin"],
-		cwd     => "/usr/src/lapack-3.5.0",
-	}->
-	exec { "make":
-		path    => ["/bin","/usr/bin","/usr/local/bin","/sbin","/usr/sbin","/usr/local/sbin"],
-		cwd     => "/usr/src/lapack-3.5.0",
-	}->
-	exec { "make install":
-		path    => ["/bin","/usr/bin","/usr/local/bin","/sbin","/usr/sbin","/usr/local/sbin"],
-		cwd     => "/usr/src/lapack-3.5.0",
+	exec { "make install $module_name":
+		command => "make install"
 	}
 }

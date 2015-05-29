@@ -3,6 +3,7 @@ define build_source::archive(
 	$version = '',
 	$dest = '', 
 	$configureAdd='',
+	$creates='configure',
 ) {
 	require build_source
 	$filename = inline_template('<%= File.basename(@url) %>')
@@ -57,7 +58,7 @@ define build_source::archive(
 	exec { "Extract $title":
        		command => "/usr/local/bin/extract.pl /tmp/$filename",
 		cwd     => "$archiveDest",
-		creates => "$_creates/configure",
+		creates => "$_creates/$configure",
 		require => File['build_source extractor'],
 	}
 }
