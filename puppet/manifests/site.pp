@@ -10,6 +10,6 @@ node 'xubuntu-1404' {
 node 'laptop' {
 	include test
 }
-node 'ubuntuServer' {
+node default {
 	include test
 }
