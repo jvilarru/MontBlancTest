@@ -7,7 +7,7 @@ class boost {
 		path    => ["/bin","/usr/bin"],
 	}->
 	exec { "tar xf /usr/src/boost.tar.gz -C /usr/src":
-		creates => "/usr/src/boost_1_58_0"
+		creates => "/usr/src/boost_1_58_0",
 		path    => ["/bin","/usr/bin"],
 	}->
 	exec { "./bootstrap.sh --prefix=$PREFIX/$VERSION":
