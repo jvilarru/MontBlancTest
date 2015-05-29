@@ -61,6 +61,7 @@ class gnu_compiler {
 	build_source::install{"gcc":
 		url          => "http://mirror1.babylon.network/gcc/releases/gcc-5.1.0/gcc-5.1.0.tar.gz",
 		environment  => ["CFLAGS=$CFLAGS_GCC"],
+		version		=> "5.1.0",
 		options      => template("$module_name/options_gcc.erb"),
 		require     =>  Build_source::Install["cloog"]
 	}
