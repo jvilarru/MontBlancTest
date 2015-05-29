@@ -6,5 +6,6 @@ class papi{
 		environment  => ["CFLAGS=$CFLAGS","FFLAGS=$FFLAGS"],
 		options      => template("papi/options.erb"),
 		version      => "5.4.1",
+		workDir      => "src",
 	}
 }
