@@ -1,4 +1,4 @@
-#dependences = 
+#dependences =  gfortran, g++
 class hdf5 (
 		$mpi='',
 ) {
@@ -9,5 +9,6 @@ class hdf5 (
 		environment  => ["CFLAGS=$CFLAGS","CXXFLAGS=$CFLAGS","FCFLAGS=-O3"],
 		options      => template("hdf5/options.erb"),
 		version      => "1.8.15",
+		dependences  => ["gfortran"]
 	}
 }
