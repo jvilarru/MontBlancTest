@@ -31,23 +31,22 @@ define build_source::archive(
 		owner => 'root',
 		group => 'root',
 	}
-	if ($url =~ /^puppet/) {
-		file {"/tmp/$filename":
-			ensure => file,
-			source => $url,
-			owner  => 'root',
-			group  => 'root',
-			before => Exec["Extract $title"]
-		}
-	}
-	else{
+	if ($url =~ /^http(s)?:\/\//) {
 		exec { "Download $title":
 			command => "wget $url -O $filename",
 			cwd => "/tmp",
 			creates => "/tmp/$filename",
 			before => Exec["Extract $title"]
 		}
-
+	}
+	else{
+		file {"/tmp/$filename":
+			ensure => file,
+			source => "puppet:///modules/$url",
+			owner  => 'root',
+			group  => 'root',
+			before => Exec["Extract $title"]
+		}
 	}
 	exec { "Extract $title":
        		command => "/usr/local/bin/extract.pl /tmp/$filename",

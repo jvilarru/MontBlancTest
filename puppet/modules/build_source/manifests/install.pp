@@ -1,3 +1,11 @@
+define safeInstall {
+	unless defined(Package["$name"]) {
+		 package{$name:
+			ensure =>latest
+		 }
+	}
+}
+
 define build_source::install (  $url,
 				$environment='',
 				$options='',
@@ -5,12 +13,10 @@ define build_source::install (  $url,
 				$srcDest='',
 				$dest='',
 				$dependences='',
+				$preConfigure='',
 ){
 	if($dependences!=''){
-		package{$dependences:
-			ensure => latest,
-			before => Build_source::Archive["$title"]
-		}
+		safeInstall{ $dependences:}
 	}
 	if($srcDest == ''){
 		if($version == ''){
@@ -39,7 +45,9 @@ define build_source::install (  $url,
 	else {
 		$destFolder = $dest
 	}
-
+	if ($preConfigure!=''){
+		Build_source::Archive["$title"]->$preConfigure->Build_source::Compile["$title"]
+	}
 	build_source::archive{"$title":
 		url    => $url,
 		dest   => $sourceFolder,
