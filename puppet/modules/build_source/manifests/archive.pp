@@ -38,7 +38,7 @@ define build_source::archive(
 		owner => 'root',
 		group => 'root',
 	}
-	if ($url =~ /^http(s)?:\/\//) {
+	if ($url =~ /^http(s)?:\/\// or $url =~ /^ftp:\/\//) {
 		exec { "Download $title":
 			command => "wget $url -O $filename",
 			cwd => "/tmp",
