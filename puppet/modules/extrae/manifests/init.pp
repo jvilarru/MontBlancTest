@@ -8,12 +8,11 @@ class extrae (  $unwind='',
 		$ver = '',
 ){
 	$CFLAGS="-O3 -funwind-tables -g"
-	build_source::install{"extrae":
+	build_source::install{"$module_name":
 		url          => "$module_name/extrae-3.1.0.tar.bz2",
 		environment  => ["CFLAGS=$CFLAGS","CXXFLAGS=$CFLAGS","FCFLAGS=-O3"],
-		options      => template("extrae/options.erb"),
+		options      => template("$module_name/options.erb"),
 		version      => "3.1.0",
-		postConfigure => "echo test > /tmp/test",
 		dependences => ["gfortran","libxml2-dev","binutils-dev","libiberty-dev","dpkg-dev"]
 	}
 }
