@@ -3,6 +3,7 @@ define build_source::compile(
 	$dest = "/opt/$title", 
 	$options = '', 
 	$environment = '',
+	$postConfigure = '',
 	$timeout = '0', 
 ) {
 	if ($environment != '') {
@@ -14,7 +15,6 @@ define build_source::compile(
 		user     => 'root',
 		group    => 'root',
 		timeout  => $timeout,
-		provider => "shell",
 		path     => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games',
 		cwd      => "$sourceFolder",
 	}
@@ -35,5 +35,13 @@ define build_source::compile(
 		command => 'make install',
 		creates => "$dest",
 		require   => Class['build_source']
+	}
+	if ($postConfigure != ''){
+		exec {"postconfigure of $title":		
+                        command => $postConfigure,
+			creates => $dest,
+                        before  => Exec["make for $title"],
+                        require => Exec["./configure for $title"]
+                }	
 	}
 }

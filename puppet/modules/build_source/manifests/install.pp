@@ -14,6 +14,7 @@ define build_source::install (  $url,
 				$dest='',
 				$dependences='',
 				$preConfigure='',
+				$postConfigure='',
 ){
 	if($dependences!=''){
 		safeInstall{ $dependences:}
@@ -46,18 +47,27 @@ define build_source::install (  $url,
 		$destFolder = $dest
 	}
 	if ($preConfigure!=''){
-		Build_source::Archive["$title"]->$preConfigure->Build_source::Compile["$title"]
+		exec {"preconfigure of $title":
+			command => $preConfigure,
+			path    => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games',
+			user    => 'root',
+			group   => 'root',
+			cwd     => "$sourceFolder",
+			creates => $destFolder,
+			before  => Build_source::Compile["$title"],
+			require => Build_source::Archive["$title"]
+		}
 	}
 	build_source::archive{"$title":
 		url    => $url,
 		dest   => $sourceFolder,
-		before => Build_source::Compile["$title"]
 	}->
 	build_source::compile{"$title":
-		sourceFolder => $sourceFolder,
-		environment  => $environment,
-		options      => $options,
-		dest         => $destFolder
+		sourceFolder  => $sourceFolder,
+		environment   => $environment,
+		postConfigure => $postConfigure,
+		options       => $options,
+		dest          => $destFolder
 	}
 
 }
