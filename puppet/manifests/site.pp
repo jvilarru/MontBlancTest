@@ -8,6 +8,7 @@ class test {
 	include papi
 	include hdf5
 	include boost
+	include lapack
 }
 node 'xubuntu-1404' {
 	include test
