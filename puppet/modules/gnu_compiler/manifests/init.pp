@@ -44,7 +44,7 @@ class gnu_compiler {
 		options      => template("$module_name/options_isl.erb"),
 		dest 		=> $ISL_DEST,
 		require     =>  Build_source::Install["mpc"],
-		dependences => ["llvm-dev"]
+		dependences => ["llvm-dev","clang","libclang-dev"]
 	}
 	#CLOOG
 	$CFLAGS_CLOOG="-O3 -fPIC"
