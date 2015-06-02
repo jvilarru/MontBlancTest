@@ -10,11 +10,6 @@ define build_source::install (  $url,
 				$postConfigure='',
 				$dependences='',
 ){
-	require stdlib
-	if ($dependences!='') {
-		ensure_packages($dependences)
-		Package[$dependences] -> Build_source::Compile["$title"]
-	}
 	if($srcDest == ''){
 		if($version == ''){
 			$_sourceFolder = "/usr/src/$name"
@@ -31,11 +26,13 @@ define build_source::install (  $url,
 	else {
 		$_sourceFolder = $srcDest
 	}
+
 	if($configureLocation == ''){
 		$sourceFolder = $_sourceFolder
 	} else {
 		$sourceFolder = "$_sourceFolder/$configureLocation"
 	}
+
 	if($dest == ''){
 		if($version == ''){
 			$destFolder = "/opt/$name"
@@ -47,6 +44,7 @@ define build_source::install (  $url,
 	else {
 		$destFolder = $dest
 	}
+
 	$extension = inline_template('<%= File.extname(@url) %>')
 	if($extension == ".git"){
 		build_source::git{"$title":
@@ -65,6 +63,7 @@ define build_source::install (  $url,
 		$requirement=Build_source::Archive["$title"]
 
 	}
+
 	if ($preConfigure!=''){
 		exec {"preconfigure of $title":
 			command => $preConfigure,
@@ -77,13 +76,15 @@ define build_source::install (  $url,
 			require => $requirement
 		}
 	}
+
 	build_source::compile{"$title":
 		sourceFolder      => $sourceFolder,
 		environment       => $environment,
 		postConfigure     => $postConfigure,
 		buildDir          => $buildDir,
 		options           => $options,
-		dest              => $destFolder
+		dest              => $destFolder,
+		dependences       => $dependences
 	}
 
 }

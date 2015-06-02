@@ -1,4 +1,11 @@
 class test {
+	exec { "apt-update":
+		command => "/usr/bin/apt-get update",
+		user    => 'root',
+		group   => 'root',
+	}
+	Exec["apt-update"] -> Package <| |>
+
 	build_source::install{ "fftw":
 	        url     => "http://www.fftw.org/fftw-3.3.4.tar.gz",
 	}

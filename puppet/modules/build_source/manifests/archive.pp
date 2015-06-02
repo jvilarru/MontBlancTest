@@ -5,7 +5,7 @@ define build_source::archive(
 	$configureAdd='',
 	$creates='configure',
 ) {
-	require build_source
+	ensure_resource('file','/usr/local/bin/extract.pl',{'ensure' => 'file','owner'  => 'root','group'  => 'root', 'mode'   => '755','source' => "puppet:///modules/build_source/extract.pl"})
 	$filename = inline_template('<%= File.basename(@url) %>')
 	Exec {
 		user    => 'root',
@@ -59,6 +59,6 @@ define build_source::archive(
        		command => "/usr/local/bin/extract.pl /tmp/$filename",
 		cwd     => "$archiveDest",
 		creates => "$_creates/$creates",
-		require => File['build_source extractor'],
+		require => File['/usr/local/bin/extract.pl'],
 	}
 }

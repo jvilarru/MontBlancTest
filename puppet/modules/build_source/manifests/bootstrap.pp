@@ -39,18 +39,16 @@ define build_source::bootstrap(
 		command   => "$sourceFolder/bootstrap.sh --prefix=$dest",
 		logoutput => 'on_failure',
 		creates   => "$dest",
-		require   => Class['build_source']
-	} ->
+	}
 	
 	exec { "$builder --> $title":
 		command => "$sourceFolder/$builder",
 		creates => "$dest",
-		require   => Class['build_source']
-	} ->
-  
+		require   => Exec["bootstrap $title"]	
+	}
 	exec { "$builder install --> $title":
 		command => "$sourceFolder/$builder install",
 		creates => "$dest",
-		require   => Class['build_source']
+		require   => Exec["$builder --> $title"]
 	}
 }

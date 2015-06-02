@@ -7,6 +7,7 @@ class lapack {
 	}
 	build_source::cmake{"$module_name":
 		sourceFolder => "/usr/src/$module_name/$version",
-		dest         => "/opt/$module_name/$version"
+		dest         => "/opt/$module_name/$version",
+		dependences  => ["gfortran"] 
 	}
 }
