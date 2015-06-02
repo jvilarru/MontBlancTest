@@ -8,16 +8,14 @@ module Puppet::Parser::Functions
 		      " (#{args.length} for 1)")
 		end
 		dir = args[0]
-		arr = dir.split("\\")
+		arr = dir.split("/")
 		paths = ""
 		files = []
 		arr.each do |path|
-        		if paths == "/"
-                		paths = paths + path
-        		else
+        		if path != ""
                 		paths = paths + "/" + path
+        			files.push(paths)
         		end
-        		files.push(paths)
 		end
 		return files
 	end

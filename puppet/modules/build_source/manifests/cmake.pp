@@ -22,14 +22,10 @@ define build_source::cmake(
 
 	if ($buildDir != '') {
 		$workDir="$sourceFolder/$buildDir"
-		file {$workDir:
-			ensure => directory,
-			owner  => 'root',
-			group  => 'root',
-		}
 	} else {
 		$workDir="$sourceFolder"
 	}
+	ensure_resource('file',$workDir,{'ensure' => 'directory','owner'  => 'root','group'  => 'root'})
 
 	Exec {
 		user     => 'root',
