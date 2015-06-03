@@ -1,14 +1,14 @@
 #dependences = 
 class atlas (  $archdef='',
 ){
-	$LAPACK_TAR="/usr/src/lapack.tar.gz"
+	$LAPACK_TAR="/tmp/lapack.tar.gz"
 	file { "$LAPACK_TAR":
 		ensure => present,
-		source => "puppet:///modules/$module_name/lapack-3.5.0.tar.gz",
+		source => "$module_name/lapack-3.5.0.tar.gz",
 	}
 	file { "/tmp/deactivate_throttling.sh":
 		ensure => present,
-		source => "puppet:///modules/$module_name/deactivate_throttling.sh",
+		source => "$module_name/deactivate_throttling.sh",
 		mode   => '755',
 		owner  => 'root',
 		group  => 'root',
