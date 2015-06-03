@@ -13,7 +13,7 @@ class atlas (  $archdef='',
 		owner  => 'root',
 		group  => 'root',
 	}
-	$PROC_COUNT=$facts['processorcount']
+	$PROC_COUNT=$::processorcount
 	exec { "deactivate_throttling.sh":
 		command  => "/tmp/deactivate_throttling.sh $PROC_COUNT",
 		user     => 'root',
@@ -22,7 +22,7 @@ class atlas (  $archdef='',
 	}
 
 	$CFLAGS="-O3"
-	$ARCH_COMP=$facts['architecture']
+	$ARCH_COMP=$::architecture
 	build_source::install{"$module_name":
 		url          => "http://sourceforge.net/projects/math-atlas/files/Developer%20%28unstable%29/3.11.34/atlas3.11.34.tar.bz2",
 		version      => "3.11.34",
