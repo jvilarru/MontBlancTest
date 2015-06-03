@@ -4,11 +4,11 @@ class atlas (  $archdef='',
 	$LAPACK_TAR="/tmp/lapack.tar.gz"
 	file { "$LAPACK_TAR":
 		ensure => present,
-		source => "$module_name/lapack-3.5.0.tgz",
+		source => "puppet:///modules/$module_name/lapack-3.5.0.tgz",
 	}
 	file { "/tmp/deactivate_throttling.sh":
 		ensure => present,
-		source => "$module_name/deactivate_throttling.sh",
+		source => "puppet:///modules/$module_name/deactivate_throttling.sh",
 		mode   => '755',
 		owner  => 'root',
 		group  => 'root',
