@@ -17,6 +17,7 @@ class atlas (  $archdef='',
 	exec { "deactivate_throttling.sh":
 		command  => "/tmp/deactivate_throttling.sh $PROC_COUNT",
 		user     => 'root',
+		path     => "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
 		onlyif   => 'dpkg -l cpufrequtils',
 		require  => File["/tmp/deactivate_throttling.sh"],
 	}
