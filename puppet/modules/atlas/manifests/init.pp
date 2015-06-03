@@ -27,8 +27,9 @@ class atlas (  $archdef='',
 	build_source::install{"$module_name":
 		url          => "http://sourceforge.net/projects/math-atlas/files/Developer%20%28unstable%29/3.11.34/atlas3.11.34.tar.bz2",
 		version      => "3.11.34",
-		require		 => [File["$LAPACK_TAR"],Exec["/tmp/deactivate_throttling.sh"]],
+		require		 => [File["$LAPACK_TAR"],Exec["deactivate_throttling.sh"]],
 		buildDir     => "$ARCH_COMP",
+		make_args    => "build",
 		dependences  => ["gfortran"]
 	}
 }
