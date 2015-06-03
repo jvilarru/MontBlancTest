@@ -10,6 +10,7 @@ define build_source::install (  $url,
 				$preConfigure='',
 				$postConfigure='',
 				$dependences='',
+				$make_args ='',
 ){
 	if($srcDest == ''){
 		if($version == ''){
@@ -74,13 +75,14 @@ define build_source::install (  $url,
 	}
 
 	build_source::compile{"$title":
-		sourceFolder      => $sourceFolder,
-		environment       => $environment,
-		postConfigure     => $postConfigure,
-		buildDir          => $buildDir,
-		options           => $options,
-		dest              => $destFolder,
-		dependences       => $dependences
+		sourceFolder  => $sourceFolder,
+		environment   => $environment,
+		postConfigure => $postConfigure,
+		buildDir      => $buildDir,
+		options       => $options,
+		dest          => $destFolder,
+		dependences   => $dependences,
+		make_args     => $make_args
 	}
 
 }

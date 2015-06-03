@@ -7,6 +7,7 @@ define build_source::compile(
 	$buildDir = '',
 	$timeout = '0', 
 	$dependences = '',
+	$make_args = '',
 ) {
 	require stdlib
 	$class_dependences = ['gcc','make','g++']
@@ -44,7 +45,7 @@ define build_source::compile(
 	}
 	
 	exec { "make for $title":
-		command => 'make',
+		command => "make $make_args",
 		creates => "$dest",
 		require => Exec["./configure for $title"]
 
