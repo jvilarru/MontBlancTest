@@ -11,10 +11,10 @@ define build_source::compile(
 ) {
 	require stdlib
 	$class_dependences = ['gcc','make','g++']
-	secure_package{$class_dependences:}
+	ensure_resource('secure_package',$class_dependences,{})
 	Package[$class_dependences] -> Exec["./configure for $title"]
 	if ($dependences != ''){
-		secure_package{$dependences:}
+		ensure_resource('secure_package',$dependences,{})
 		Package[$dependences] -> Exec["./configure for $title"]
 	}
 

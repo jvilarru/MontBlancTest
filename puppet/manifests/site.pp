@@ -13,7 +13,6 @@ class test {
 node default {
 	include test
 }
-node 'xubuntu-1404' {
-        secure_package{"sl":}
-        secure_package{"cmatrix":}	
-}
+#node 'xubuntu-1404' {
+#	include boost
+#}

@@ -32,15 +32,13 @@ define build_source::archive(
 	
 	$pathComplet = getPaths($archiveDest)
 	ensure_resource('file',$pathComplet,{'ensure' => 'directory','owner' => 'root', 'group' => 'root'})
-	secure_package{"wget":}
 	
 	if ($url =~ /^http(s)?:\/\// or $url =~ /^ftp:\/\//) {
 		exec { "Download $title":
-			command  => "wget $url -O $filename",
-			cwd      => "/tmp",
-			creates  => "/tmp/$filename",
-			requires => Package["wget"],
-			before   => Exec["Extract $title"]
+			command => "wget $url -O $filename",
+			cwd     => "/tmp",
+			creates => "/tmp/$filename",
+			before  => Exec["Extract $title"]
 		}
 	}
 	else{

@@ -3,7 +3,7 @@ define build_source::git(
 	$version = '',
 	$dest = '', 
 ) {
-	secure_package{"git":}
+	ensure_resource('secure_package','git',{})
 	Exec {
 		user    => 'root',
 		timeout => $timeout,
