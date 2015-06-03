@@ -10,7 +10,7 @@ define build_source::bootstrap(
 ) {
 	require stdlib
         if ($dependences!='') {
-                ensure_packages($dependences)
+                secure_package{$dependences:}
                 Package[$dependences] -> Exec["bootstrap $title"]
         }
 	if ($environment != '') {

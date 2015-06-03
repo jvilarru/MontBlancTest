@@ -3,6 +3,7 @@ define build_source::git(
 	$version = '',
 	$dest = '', 
 ) {
+	secure_package{"git":}
 	Exec {
 		user    => 'root',
 		timeout => $timeout,
@@ -22,5 +23,6 @@ define build_source::git(
 	exec { "Clone $title":
        		command => "git clone $url $gitDest",
 		creates => $gitDest,
+		require => Package["git"]
 	}
 }

@@ -8,9 +8,11 @@ define build_source::cmake(
 	$dependences = '',
 ) {
 	require stdlib
-	ensure_packages(["cmake","gcc","make","g++"])
+	$class_dependences = ["cmake","gcc","make","g++"]
+	secure_package{$class_dependences:}
+        Package[$class_dependences] -> Exec["cmake for $title"]
         if ($dependences!='') {
-                ensure_packages($dependences)
+                secure_package{$dependences:}
                 Package[$dependences] -> Exec["cmake for $title"]
         }
 
