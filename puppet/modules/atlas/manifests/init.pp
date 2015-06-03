@@ -4,7 +4,7 @@ class atlas (  $archdef='',
 	$LAPACK_TAR="/tmp/lapack.tar.gz"
 	file { "$LAPACK_TAR":
 		ensure => present,
-		source => "$module_name/lapack-3.5.0.tar.gz",
+		source => "$module_name/lapack-3.5.0.tgz",
 	}
 	file { "/tmp/deactivate_throttling.sh":
 		ensure => present,
