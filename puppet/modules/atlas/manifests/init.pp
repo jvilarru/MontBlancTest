@@ -1,34 +1,29 @@
 #dependences = 
 class atlas (  $archdef='',
 ){
-	$LAPACK_TAR="/tmp/lapack.tar.gz"
-	file { "$LAPACK_TAR":
+	define core_performance {
+		exec {"Put core $title in performance": 
+			command => "/bin/echo performance > /sys/devices/system/cpu/cpu${title}/cpufreq/scaling_governor",
+			user    => 'root',
+			group   => 'root',
+			onlyif  => 'dpkg -l cpufrequtils',
+			before  => Build_source::Install["$module_name"]
+		}
+	}
+	require stdlib
+	$cpus = range(0,$::processorcount-1)
+	core_performance{$cpus:}
+	file { "lapack .tar.gz functions for atlas":
+		path   => ,"/tmp/lapack.tar.gz",
 		ensure => present,
 		source => "puppet:///modules/$module_name/lapack-3.5.0.tgz",
+		before => Build_source::Install["$module_name"]
 	}
-	file { "/tmp/deactivate_throttling.sh":
-		ensure => present,
-		source => "puppet:///modules/$module_name/deactivate_throttling.sh",
-		mode   => '755',
-		owner  => 'root',
-		group  => 'root',
-	}
-	$PROC_COUNT=$::processorcount
-	exec { "deactivate_throttling.sh":
-		command  => "/tmp/deactivate_throttling.sh $PROC_COUNT",
-		user     => 'root',
-		path     => "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
-		onlyif   => 'dpkg -l cpufrequtils',
-		require  => File["/tmp/deactivate_throttling.sh"],
-	}
-
 	$CFLAGS="-O3"
-	$ARCH_COMP=$::architecture
 	build_source::install{"$module_name":
 		url          => "http://sourceforge.net/projects/math-atlas/files/Developer%20%28unstable%29/3.11.34/atlas3.11.34.tar.bz2",
 		version      => "3.11.34",
-		require		 => [File["$LAPACK_TAR"],Exec["deactivate_throttling.sh"]],
-		buildDir     => "$ARCH_COMP",
+		buildDir     => "$::architecture",
 		make_args    => "build",
 		dependences  => ["gfortran"]
 	}
