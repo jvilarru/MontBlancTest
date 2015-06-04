@@ -18,7 +18,7 @@ class environment_modules ($types = []){
 		owner => 'root',
 		group => 'root',
 	}
-        environment_modules::folders{$types:
+        environment_modules::folder{$types:
                 prefix => $prefix
         }
 
@@ -36,13 +36,10 @@ class environment_modules ($types = []){
 	"$module_name modulefiles":
 		path => "$prefix/Modules/default/modulefiles",
 		ensure => "directory",
-		mode => '755',
-		require => File["$module_name default"];
+		mode => '755';
 	"$module_name modulespath":
 		path => "$prefix/Modules/default/init/.modulespath",
 		ensure => "file",
-		mode => '664',
-#		content => template("$module_name/modulespath.erb"),
-		require => File["$module_name default"];
+		mode => '664';
 	}
 }

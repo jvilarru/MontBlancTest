@@ -85,7 +85,7 @@ define build_source (	$type = 'configure',
 	if($packages != ''){
 		$allDeps = concat($packages,$generalDependences)
 		ensure_resource('secure_package',$allDeps,{})
-		Package[$packages] -> $reqInst
+		Secure_package[$packages] -> $reqInst
 	}
 	if($dest == ''){
                 if($version == ''){
