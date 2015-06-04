@@ -11,9 +11,9 @@ class all {
 	include lapack
 	#include atlas
 	#include gnu_compiler
-	#class {"environment_modules":
-	#	types => ['compilers','tools','applications']
-	#}
+	class {"environment_modules":
+		types => ['compilers','tools','applications']
+	}
 }
 node default {
 	include all
