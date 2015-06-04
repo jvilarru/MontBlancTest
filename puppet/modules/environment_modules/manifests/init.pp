@@ -18,16 +18,15 @@ class environment_modules ($types = []){
 		owner => 'root',
 		group => 'root',
 	}
-	define moduleFiles_folders($prefix,{
-		file {"$module_name $title":
+	define moduleFiles_folders($prefix){
+		file {"environment_modules $title":
 			path => "$prefix/Modules/default/modulefiles/$title",
 			ensure => "directory",
 			mode => '755',
-			require => File["$module_name modulefiles"];
-			
+			require => File["$module_name modulefiles"],
 		}	
 	}
-	$moduleFiles_folders{$types:
+	moduleFiles_folders{$types:
 		prefix => $prefix
 	}
 
