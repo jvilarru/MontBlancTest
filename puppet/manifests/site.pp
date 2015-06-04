@@ -9,6 +9,11 @@ class all {
 	include hdf5
 	include boost
 	include lapack
+	#include atlas
+	#include gnu_compiler
+	class {"environment_modules":
+		types => ['compilers','tools','applications']
+	}
 }
 node default {
 	include all
@@ -16,12 +21,6 @@ node default {
 #node 'xubuntu-1404' {
 #	include boost
 #}
-class test {
-	$arr1=["a","b"]
-	$arr2=["c","d"]
-	$arr3 = concat($arr1,$arr2)
-	notice( "arr1=$arr1 arr3=$arr3")
-}
 node 'laptop' {
 	include all
 }
