@@ -69,23 +69,28 @@ class gnu_compiler {
 		require =>  Build_source["cloog"]
 	}
 	# Module file
-	if defined(Class["environment_modules"]) {
-		require "environment_modules"
+	$APP_CODE_NAME = "gcc"
+	$APP_NAME="GNU Compiler Suite"
+	$APP_VER = $GCC_VER
+	$APP_PREFIX = $GCC_PREFIX
+	$APP_CONFLICTS = $APP_CODE_NAME
+	$APP_DESC = "'gcc g++ ar gfortran y penes en vinagre'"
+	if defined("environment_modules") {
 		$MODULEFILES_PATH = "/opt/environment_modules/3.2.10/Modules/default/modulefiles/compilers"
 		File {
-			owner => 'root',
-			group => 'root',
+			owner   => 'root',
+			group   => 'root',
 		}
 		file { "gcc_folder":
 			path => "$MODULEFILES_PATH/gcc",
 			ensure => "directory",
 			mode => '755',
-			require => Build_source["gcc"]
+			require => [Build_source["environment_modules"],Build_source["gcc"]]
 		}
 		file { "gnu_compiler_module":
 			path => "$MODULEFILES_PATH/gcc/$GCC_VER",
 			ensure => "file",
-			content => template("$module_name/gcc.erb"),
+			content => template("$module_name/generic_module.erb"),
 			mode => '644',
 			require => File["gcc_folder"]
 		}
