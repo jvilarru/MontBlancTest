@@ -8,7 +8,13 @@
 # $version = version of the application, needed to make default this module
 ################################################################################
 ################################################################################
-define environment_modules::generateModule ( $type, $prefix, $conflicts = [], $modname, $desc = '', $version = '') {
+define environment_modules::generateModule(	$type,
+					$prefix,
+					$conflicts=[],
+					$modname,
+					$desc='',
+					$version=''
+){
 	$MODULEFILES_PATH = "/opt/environment_modules/3.2.10/Modules/default/modulefiles/$type"
 	
 	if ( $desc != '' ) {
@@ -37,13 +43,13 @@ define environment_modules::generateModule ( $type, $prefix, $conflicts = [], $m
 			ensure  => 'file',
 			mode    => '644',
 			content => template("environment_modules/generic_module.erb"),
-			require => File["modulefile folder $type"]
+			require => File["modulefile folder $type";
 		"default_version":
 			path    => "$MODULEFILES_PATH/$modname/.version",
 			ensure  => file,
 			content => template("environment_modules/generic_version.erb"),
 			mode    => '644',
-			require => File["$modname modulefile"]
+			require => File["$modname modulefile"];
 		}
 	} else {
 		$APP_VER = $version
@@ -54,13 +60,13 @@ define environment_modules::generateModule ( $type, $prefix, $conflicts = [], $m
 			ensure  => 'file',
 			mode    => '644',
 			content => template("environment_modules/generic_module.erb"),
-			require => File["modulefile folder $type"]
+			require => File["modulefile folder $type"];
 		"default_version":
 			path    => "$MODULEFILES_PATH/$modname/.version",
 			ensure  => file,
 			content => template("environment_modules/generic_version.erb"),
 			mode    => '644',
-			require => File["$modname modulefile"]
+			require => File["$modname modulefile"];
 		}
 	}
 }
