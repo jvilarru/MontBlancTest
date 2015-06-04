@@ -24,3 +24,7 @@ node default {
 node 'laptop' {
 	include all
 }
+node 'davm' {
+	include gnu_compiler
+	include environment_modules
+}
