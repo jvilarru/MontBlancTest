@@ -18,7 +18,7 @@ class environment_modules ($types = []){
 		owner => 'root',
 		group => 'root',
 	}
-        environment_modules::folders{$types:
+        environment_modules::folder{$types:
                 prefix => $prefix
         }
 
