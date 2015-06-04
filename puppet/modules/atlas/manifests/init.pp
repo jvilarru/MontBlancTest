@@ -25,7 +25,7 @@ class atlas (  $archdef='',
 		url       => "http://sourceforge.net/projects/math-atlas/files/Developer%20%28unstable%29/3.11.34/atlas3.11.34.tar.bz2",
 		version   => "3.11.34",
 		buildDir  => "$::architecture",
-		make_args => "build",
+		buildArgs => "build",
 		packages  => ["gfortran"]
 	}
 }
