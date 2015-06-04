@@ -24,7 +24,8 @@ node 'laptop' {
 	include all
 }
 node 'davm' {
-	include gnu_compiler
-	include environment_modules
-	include papi
+	#	include gnu_compiler
+	#	include environment_modules
+	#	include papi
+	include fftw
 }
