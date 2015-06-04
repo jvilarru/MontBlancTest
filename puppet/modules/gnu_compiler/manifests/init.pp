@@ -9,7 +9,8 @@ class gnu_compiler {
 		env      => ["CFLAGS=$CFLAGS_GMP"],
 		options  => template("$module_name/options_gmp.erb"),
 		dest     => $GMP_DEST,
-		packages => ["bison","flex"]
+		#		packages => ["bison","flex"]
+		packages => ["bison","flex","llvm-dev","clang","libclang-dev"]
 	}
 	
 	#MPFR
@@ -44,7 +45,7 @@ class gnu_compiler {
 		options  => template("$module_name/options_isl.erb"),
 		dest 	 => $ISL_DEST,
 		require  =>  Build_source["mpc"],
-		packages => ["llvm-dev","clang","libclang-dev"]
+		#	packages => ["llvm-dev","clang","libclang-dev"]
 	}
 	#CLOOG
 	$CFLAGS_CLOOG="-O3 -fPIC"
