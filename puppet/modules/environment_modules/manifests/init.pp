@@ -37,12 +37,9 @@ class environment_modules ($types = []){
 		path => "$prefix/Modules/default/modulefiles",
 		ensure => "directory",
 		mode => '755',
-		require => File["$module_name default"];
 	"$module_name modulespath":
 		path => "$prefix/Modules/default/init/.modulespath",
 		ensure => "file",
 		mode => '664',
-#		content => template("$module_name/modulespath.erb"),
-		require => File["$module_name default"];
 	}
 }
