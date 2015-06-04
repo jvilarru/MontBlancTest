@@ -69,37 +69,15 @@ class gnu_compiler {
 		require =>  Build_source["cloog"]
 	}
 	# Module file
-	$APP_CODE_NAME = "gcc"
-	$APP_NAME="GNU Compiler Suite"
-	$APP_VER = $GCC_VER
-	$APP_PREFIX = $GCC_PREFIX
-	$APP_CONFLICTS = $APP_CODE_NAME
-	$APP_DESC = "'gcc g++ ar gfortran y penes en vinagre'"
 	if defined("environment_modules") {
-		$MODULEFILES_PATH = "/opt/environment_modules/3.2.10/Modules/default/modulefiles/compilers"
-		File {
-			owner   => 'root',
-			group   => 'root',
-		}
-		file { "gcc_folder":
-			path => "$MODULEFILES_PATH/gcc",
-			ensure => "directory",
-			mode => '755',
-			require => [Build_source["environment_modules"],Build_source["gcc"]]
-		}
-		file { "gnu_compiler_module":
-			path => "$MODULEFILES_PATH/gcc/$GCC_VER",
-			ensure => "file",
-			content => template("$module_name/generic_module.erb"),
-			mode => '644',
-			require => File["gcc_folder"]
-		}
-		file { "default_version":
-			path => "$MODULEFILES_PATH/gcc/.version",
-			content => template("$module_name/version.erb"),
-			ensure => "file",
-			mode => '644',
-			require => File["gcc_folder"]
+		require Build_source["gcc"]
+		Environment_modules::generateModule { "gcc":
+			$type      => "compilers",
+			$prefix    => "$GCC_PREFIX",
+			$conflicts => ["gcc"],
+			$modname   => "gcc",
+			$desc      => "gcc, g++, gfortran",
+			$version   => "5.1.0",
 		}
 	}
 }
