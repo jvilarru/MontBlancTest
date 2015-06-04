@@ -22,8 +22,8 @@ class atlas (  $archdef='',
 	}
 	$CFLAGS="-O3"
 	build_source::install{"$module_name":
-		url          => "http://sourceforge.net/projects/math-atlas/files/Developer%20%28unstable%29/3.11.34/atlas3.11.34.tar.bz2",
-		version      => "3.11.34",
+		url          => "http://sourceforge.net/projects/math-atlas/files/Developer%20%28unstable%29/3.11.30/atlas3.11.30.tar.bz2",
+		version      => "3.11.30",
 		buildDir     => "$::architecture",
 		make_args    => "build",
 		dependences  => ["gfortran"]
