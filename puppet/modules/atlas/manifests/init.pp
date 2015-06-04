@@ -6,6 +6,7 @@ class atlas (  $archdef='',
 			command => "/bin/echo performance > /sys/devices/system/cpu/cpu${title}/cpufreq/scaling_governor",
 			user    => 'root',
 			group   => 'root',
+			path    => '/bin:/usr/bin:/usr/local/bin:/sbin:/usr/sbin:/usr/local/sbin',
 			onlyif  => 'dpkg -l cpufrequtils',
 			before  => Build_source["$module_name"]
 		}

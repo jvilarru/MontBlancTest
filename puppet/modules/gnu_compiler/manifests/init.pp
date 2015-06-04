@@ -59,11 +59,44 @@ class gnu_compiler {
 	}
 	#GCC
 	$CFLAGS_GCC="-O3"
+	$GCC_VER="5.1.0"
+	$GCC_PREFIX="/opt/gcc/$GCC_VER"
 	build_source{"gcc":
 		url     => "http://mirror1.babylon.network/gcc/releases/gcc-5.1.0/gcc-5.1.0.tar.gz",
 		env     => ["CFLAGS=$CFLAGS_GCC"],
 		version => "5.1.0",
+		dest    => $GCC_PREFIX,
 		options => template("$module_name/options_gcc.erb"),
 		require =>  Build_source["cloog"]
+	}
+	# Module file
+	if defined(Build_source::Install["environment_modules"]) {
+		$MODULEFILES_PATH = "/opt/environment_modules/3.2.10/Modules/default/modulefiles/compilers"
+		file { "gcc_folder":
+			path => "$MODULEFILES_PATH/gcc",
+			ensure => "directory",
+			mode => '755',
+			owner => 'root',
+			group => 'root',
+			require => Build_source::Install["gcc"]
+		}
+		file { "gnu_compiler_module":
+			path => "$MODULEFILES_PATH/gcc/$GCC_VER",
+			ensure => "file",
+			content => template("$module_name/gcc.erb"),
+			mode => '644',
+			owner => 'root',
+			group => 'root',
+			require => File["gcc_folder"]
+		}
+		file { "default_version":
+			path => "$MODULEFILES_PATH/gcc/.version",
+			content => template("$module_name/version.erb"),
+			ensure => "file",
+			mode => '644',
+			owner => 'root',
+			group => 'root',
+			require => File["gcc_folder"]
+		}	
 	}
 }
