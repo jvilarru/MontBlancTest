@@ -69,17 +69,13 @@ class gnu_compiler {
 	}
 	# Module file
 	if defined("environment_modules") {
-		notice("caca")
-		require environment_modules
-		#environment_modules::folder{"test":
-		#	prefix => "/opt/environment_modules/3.12.10"
-		#}
 		environment_modules::generate_module{"gcc":
-			type      => "compilers",
-			prefix    => "$GCC_PREFIX",
-			desc      => "gcc, g++, gfortran",
-			version   => "5.1.0",
-			require   => Build_source["gcc"]
+			type    => "compilers",
+			prefix  => "$GCC_PREFIX",
+			app_name    => "GNU Compiler Suite",
+			desc    => "gcc, g++, gfortran",
+			version => "5.1.0",
+			require => [Build_source["gcc"],Build_source['environment_modules']]
 		}
 	}
 }

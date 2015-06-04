@@ -11,9 +11,7 @@ class all {
 	include lapack
 	#include atlas
 	include gnu_compiler
-	class {"environment_modules":
-		types => ['compilers','tools','applications']
-	}
+	include environment_modules
 }
 node default {
 	include all
@@ -28,4 +26,5 @@ node 'laptop' {
 node 'davm' {
 	include gnu_compiler
 	include environment_modules
+	include papi
 }

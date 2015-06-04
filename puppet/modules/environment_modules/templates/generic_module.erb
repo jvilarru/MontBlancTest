@@ -17,17 +17,17 @@ if { [module-info mode] != "whatis" } {
 }
 
 set		topdir		<%= @APP_PREFIX %>
-<% if @APP_VER != '' %>
+<% if @APP_VER != '' -%>
 set		version		<%= @APP_VER %>
 <% end -%>
 
-<% if File.directory?(@APP_PREFIX/bin) %>
+<% if File.directory?(@APP_PREFIX+"/bin") -%>
 prepend-path    PATH            $topdir/bin
-<% end %>
-<% if File.directory?(@APP_PREFIX/lib) %>
+<% end -%>
+<% if File.directory?(@APP_PREFIX+"/lib") -%>
 prepend-path    LD_LIBRARY_PATH $topdir/lib
 prepend-path	LD_RUN_PATH		$topdir/lib
-<% end %>
-<% if File.directory?(@APP_PREFIX/share/man) %>
+<% end -%>
+<% if File.directory?(@APP_PREFIX+"/share/man") -%>
 prepend-path    MANPATH         $topdir/share/man
-<% end %>
+<% end -%>

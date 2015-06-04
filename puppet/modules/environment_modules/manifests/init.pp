@@ -1,5 +1,5 @@
 #dependences = tcl8.6-dev tclx8.4-dev
-class environment_modules ($types = []){
+class environment_modules {
 
 	# Installation
 	$ver = "3.2.10"
@@ -18,28 +18,26 @@ class environment_modules ($types = []){
 		owner => 'root',
 		group => 'root',
 	}
-        environment_modules::folder{$types:
-                prefix => $prefix
-        }
 
 	file { 
-	"$module_name default":
-		path    => "$prefix/Modules/default",
-		ensure  => "$prefix/Modules/$ver",
-		require => Build_source["$module_name"];
-	"$module_name wrapper":
-		path => "/etc/profile.d/environent_modules.sh",
-		ensure => "file",
-		mode => '644',
-		content => template("$module_name/environment_modules.erb"),
-		require => Build_source["$module_name"];
-	"$module_name modulefiles":
-		path => "$prefix/Modules/default/modulefiles",
-		ensure => "directory",
-		mode => '755';
-	"$module_name modulespath":
-		path => "$prefix/Modules/default/init/.modulespath",
-		ensure => "file",
-		mode => '664';
+		"$module_name default":
+			path    => "$prefix/Modules/default",
+			ensure  => "$prefix/Modules/$ver",
+			require => Build_source["$module_name"];
+		"$module_name wrapper":
+			path => "/etc/profile.d/environent_modules.sh",
+			ensure => "file",
+			mode => '644',
+			content => template("$module_name/environment_modules.erb"),
+			require => Build_source["$module_name"];
+		"$module_name modulefiles":
+			path => "$prefix/Modules/default/modulefiles",
+			ensure => "directory",
+			mode => '755';
+		"$module_name modulespath":
+			path    => "$prefix/Modules/default/init/.modulespath",
+			ensure  => "file",
+			mode    => '664',
+			content => "";
 	}
 }
