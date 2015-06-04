@@ -33,7 +33,6 @@ define environment_modules::generateModule(	$type,
 		mode   => '755'
 	}
 	
-	
 	if ( $version != '' ) {
 		$APP_VER = $version
 		$APP_PREFIX = $prefix
@@ -43,13 +42,14 @@ define environment_modules::generateModule(	$type,
 			ensure  => 'file',
 			mode    => '644',
 			content => template("environment_modules/generic_module.erb"),
-			require => File["modulefile folder $type";
-		"default_version":
+			require => File["modulefile folder $type"
+		}
+		file { "default_version":
 			path    => "$MODULEFILES_PATH/$modname/.version",
 			ensure  => file,
 			content => template("environment_modules/generic_version.erb"),
 			mode    => '644',
-			require => File["$modname modulefile"];
+			require => File["$modname modulefile"]
 		}
 	} else {
 		$APP_VER = $version
@@ -60,13 +60,14 @@ define environment_modules::generateModule(	$type,
 			ensure  => 'file',
 			mode    => '644',
 			content => template("environment_modules/generic_module.erb"),
-			require => File["modulefile folder $type"];
-		"default_version":
+			require => File["modulefile folder $type"]
+		}
+		file { "default_version":
 			path    => "$MODULEFILES_PATH/$modname/.version",
 			ensure  => file,
 			content => template("environment_modules/generic_version.erb"),
 			mode    => '644',
-			require => File["$modname modulefile"];
+			require => File["$modname modulefile"]
 		}
 	}
 }
