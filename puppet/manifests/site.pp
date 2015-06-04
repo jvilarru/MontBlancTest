@@ -27,5 +27,6 @@ node 'davm' {
 	#	include gnu_compiler
 	#	include environment_modules
 	#	include papi
-	include fftw
+	#	include fftw
+	include ompss
 }
