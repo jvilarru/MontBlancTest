@@ -60,12 +60,14 @@ class gnu_compiler {
 	#GCC
 	$CFLAGS_GCC="-O3"
 	$GCC_VER="5.1.0"
+	$GCC_PREFIX="/opt/gcc/$GCC_VER"
 	build_source::install{"gcc":
 		url          => "http://mirror1.babylon.network/gcc/releases/gcc-5.1.0/gcc-5.1.0.tar.gz",
 		environment  => ["CFLAGS=$CFLAGS_GCC"],
 		version		=> "5.1.0",
+		dest        => "$GCC_PREFIX",
 		options      => template("$module_name/options_gcc.erb"),
-		require     =>  Build_source::Install["cloog"]
+	#	require     =>  Build_source::Install["cloog"]
 	}
 
 	# Module file
@@ -75,8 +77,8 @@ class gnu_compiler {
 			path => "$MODULEFILES_PATH/gcc",
 			ensure => "directory",
 			mode => '755',
-			onwer => 'root',
-			group => 'root'
+			owner => 'root',
+			group => 'root',
 			require => Build_source::Install["gcc"]
 		}
 		file { "gnu_compiler_module":
