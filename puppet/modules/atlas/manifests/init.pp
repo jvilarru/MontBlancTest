@@ -6,6 +6,7 @@ class atlas (  $archdef='',
 			command => "/bin/echo performance > /sys/devices/system/cpu/cpu${title}/cpufreq/scaling_governor",
 			user    => 'root',
 			group   => 'root',
+			path    => '/bin:/usr/bin:/usr/local/bin:/sbin:/usr/sbin:/usr/local/sbin',
 			onlyif  => 'dpkg -l cpufrequtils',
 			before  => Build_source::Install["$module_name"]
 		}
@@ -14,7 +15,7 @@ class atlas (  $archdef='',
 	$cpus = range(0,$::processorcount-1)
 	core_performance{$cpus:}
 	file { "lapack .tar.gz functions for atlas":
-		path   => ,"/tmp/lapack.tar.gz",
+		path   => "/tmp/lapack.tar.gz",
 		ensure => present,
 		source => "puppet:///modules/$module_name/lapack-3.5.0.tgz",
 		before => Build_source::Install["$module_name"]
