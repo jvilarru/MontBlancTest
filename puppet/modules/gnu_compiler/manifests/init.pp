@@ -69,18 +69,6 @@ class gnu_compiler {
 		require => [Build_source["cloog"],Build_source["isl"],Build_source["gmp"],Build_source["mpc"],Build_source["mpfr"]]
 	}
 	# Module file
-<<<<<<< HEAD
-	#if defined(Class['environment_modules']) {
-		generateModule { "gcc":
-			type      => "compilers",
-			prefix    => "/opt/gcc/5.1.0",
-			conflicts => ["gcc"],
-			modname   => "gcc",
-			desc      => "gcc, g++, gfortran",
-			version   => "5.1.0"
-		}
-		#}
-=======
 	if defined("environment_modules") {
 #		require Build_source["gcc"]
 #		Environment_modules::generateModule { "gcc":
@@ -92,5 +80,4 @@ class gnu_compiler {
 #			$version   => "5.1.0",
 #		}
 	}
->>>>>>> f1024d2e6b1824fbc3cabbda89f78dc5205c18f8
 }
