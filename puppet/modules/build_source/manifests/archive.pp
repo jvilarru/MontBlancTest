@@ -1,8 +1,17 @@
+#################################################################
+# This module fetches the file in the url and extracts it into  #
+# the destination folder.					#
+# Params:							#
+# url     => The url of the file to fetch, it accepts http(s)	# 
+#  	     and ftp urls, other strings will be interpreted    #
+#	     as puppet files with the prefix puppet:///modules/ #
+# dest    => (defaults to /usr/src/$title) destination folder	#
+# creates => (defaults to configure) a file/folder that exists	#
+#	     when the package is extracted			#
+#################################################################
 define build_source::archive(
 	$url,
-	$version = '',
-	$dest = '', 
-	$configureAdd='',
+	$dest="/usr/src/$title", 
 	$creates='configure',
 ) {
 	require stdlib
@@ -13,24 +22,7 @@ define build_source::archive(
 		timeout => $timeout,
 		path    => '/usr/bin:/bin',
 	}
-	if ($dest == '') {
-		if ($version == '') {
-			$archiveDest="/usr/src/$name"
-		}
-		else {
-			$archiveDest="/usr/src/${name}/${version}"
-		}	
-	}
-	else {
-		$archiveDest=$dest
-	}
-	if ($configureAdd==''){
-		$_creates = $archiveDest 
-	} else {
-		$_creates = "$archiveDest/$configureAdd"
-	}
-	
-	$pathComplet = getPaths($archiveDest)
+	$pathComplet = getPaths($dest)
 	ensure_resource('file',$pathComplet,{'ensure' => 'directory','owner' => 'root', 'group' => 'root'})
 	
 	if ($url =~ /^http(s)?:\/\// or $url =~ /^ftp:\/\//) {
@@ -52,8 +44,8 @@ define build_source::archive(
 	}
 	exec { "Extract $title":
        		command => "/usr/local/bin/extract.pl /tmp/$filename",
-		cwd     => "$archiveDest",
-		creates => "$_creates/$creates",
+		cwd     => "$dest",
+		creates => "$dest/$creates",
 		require => [File['/usr/local/bin/extract.pl'],File[$pathComplet]]
 	}
 }

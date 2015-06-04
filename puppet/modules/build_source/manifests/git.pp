@@ -1,7 +1,12 @@
+#################################################################
+# This module clone git repositories.				#
+# Params:                     					#
+# url  => Git repository url					#
+# dest => (defaults to /Usr/src/$title) destination folder  	#
+#################################################################
 define build_source::git(
 	$url, 
-	$version = '',
-	$dest = '', 
+	$dest = "/usr/src/$title", 
 ) {
 	ensure_resource('secure_package','git',{})
 	Exec {
@@ -9,20 +14,9 @@ define build_source::git(
 		timeout => $timeout,
 		path    => '/usr/bin:/bin',
 	}
-	if ($dest == '') {
-		if ($version == '') {
-			$gitDest="/usr/src/$name"
-		}
-		else {
-			$gitDest="/usr/src/${name}/${version}"
-		}	
-	}
-	else {
-		$gitDest=$dest
-	}
 	exec { "Clone $title":
-       		command => "git clone $url $gitDest",
-		creates => $gitDest,
+       		command => "git clone $url $dest",
+		creates => $dest,
 		require => Package["git"]
 	}
 }

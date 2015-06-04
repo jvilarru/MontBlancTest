@@ -1,4 +1,4 @@
-define build_source::install (  $url,
+define build_source::install(	$url,
 				$environment='',
 				$options='',
 				$version='',
@@ -6,7 +6,7 @@ define build_source::install (  $url,
 				$dest='',
 				$defaultPrefix='/opt',
 				$buildDir='',
-				$configureLocation='',
+				$creates='configure',
 				$preConfigure='',
 				$postConfigure='',
 				$dependences='',
@@ -24,7 +24,7 @@ define build_source::install (  $url,
 		$_sourceFolder = $srcDest
 	}
 
-	if($configureLocation == ''){
+	if($creates == ''){
 		$sourceFolder = $_sourceFolder
 	} else {
 		$sourceFolder = "$_sourceFolder/$configureLocation"
@@ -52,10 +52,10 @@ define build_source::install (  $url,
 		$requirement=Build_source::Git["$title"]
 	} else {
 		build_source::archive{"$title":
-			url          => $url,
-			dest         => $_sourceFolder,
-			configureAdd => $configureLocation,
-			before       => Build_source::Compile["$title"]
+			url     => $url,
+			dest    => $_sourceFolder,
+			creates => $creates,
+			before  => Build_source::Compile["$title"]
 		}
 		$requirement=Build_source::Archive["$title"]
 

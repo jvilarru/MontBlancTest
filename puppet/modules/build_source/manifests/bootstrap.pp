@@ -1,3 +1,15 @@
+#################################################################
+# This module installs applications from bootstrap.             #
+# Params:                                                       #
+# sourceFolder => The folder from where bootstrap is executed   # 
+# dest         => (defaults to /opt/$title) destination folder  #
+# options      => (optional) options to pass to the bootstrap   #
+# builder      => (defaults to $title) name of the builder      #
+# 		  equivalent to the make command		#
+# environment  => (optional) array of environmental variables 	#
+# buildDir     => (optional) subfolder from where to build      # 
+# buildArgs    => (optional) arguments to the builder		#
+#################################################################
 define build_source::bootstrap(
 	$sourceFolder, 
 	$dest = "/opt/$title", 
@@ -5,14 +17,8 @@ define build_source::bootstrap(
 	$builder = "$title",
 	$environment = '',
 	$buildDir = '',
-	$timeout = '0', 
-	$dependences ='',
+	$buildArgs = '',
 ) {
-	require stdlib
-        if ($dependences!='') {
-                ensure_resource('secure_package',$dependences,{})
-                Package[$dependences] -> Exec["bootstrap $title"]
-        }
 	if ($environment != '') {
 		Exec {
 			environment => $environment
@@ -27,18 +33,17 @@ define build_source::bootstrap(
 	Exec {
 		user     => 'root',
 		group    => 'root',
-		timeout  => $timeout,
+		timeout  => 0,
 		path     => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games',
 		cwd      => "$workDir",
 	}
 	exec { "bootstrap $title":
-		command   => "$sourceFolder/bootstrap.sh --prefix=$dest",
+		command   => "$sourceFolder/bootstrap.sh $options --prefix=$dest",
 		logoutput => 'on_failure',
 		creates   => "$dest",
 	}
-	
 	exec { "$builder --> $title":
-		command => "$sourceFolder/$builder",
+		command => "$sourceFolder/$builder $buildArgs",
 		creates => "$dest",
 		require   => Exec["bootstrap $title"]	
 	}

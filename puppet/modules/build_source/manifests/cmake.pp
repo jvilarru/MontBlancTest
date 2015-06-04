@@ -1,21 +1,21 @@
+#################################################################
+# This module installs applications using cmake.		#
+# Params:                                                       #
+# sourceFolder => The folder from where cmake is executed   	# 
+# dest         => (defaults to /opt/$title) destination folder  #
+# options      => (optional) options to pass to the cmake   	#
+# environment  => (optional) array of environmental variables   #
+# buildDir     => (optional) subfolder from where to build      # 
+# buildArgs    => (optional) arguments to make		        #
+#################################################################
 define build_source::cmake(
 	$sourceFolder, 
 	$dest = "/opt/$title", 
 	$options = '', 
 	$environment = '',
 	$buildDir = '',
-	$timeout = '0', 
-	$dependences = '',
+	$buildArgs = '',
 ) {
-	require stdlib
-	$class_dependences = ["cmake","gcc","make","g++"]
-	ensure_resource('secure_package',$class_dependences,{})
-        Package[$class_dependences] -> Exec["cmake for $title"]
-        if ($dependences!='') {
-                ensure_resource('secure_package',$dependences,{})
-                Package[$dependences] -> Exec["cmake for $title"]
-        }
-
 	if ($environment != '') {
 		Exec {
 			environment => $environment
@@ -32,7 +32,7 @@ define build_source::cmake(
 	Exec {
 		user     => 'root',
 		group    => 'root',
-		timeout  => $timeout,
+		timeout  => 0,
 		path     => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games',
 		cwd      => "$workDir",
 	}
@@ -44,7 +44,7 @@ define build_source::cmake(
 	}
 	
 	exec { "make for $title":
-		command => 'make',
+		command => "make $makeArgs",
 		creates => "$dest",
 		require => Exec["cmake for $title"]
 	}

@@ -1,23 +1,21 @@
+#################################################################
+# This module installs applications using configure.            #
+# Params:                                                       #
+# sourceFolder => The folder from where configure is executed   # 
+# dest         => (defaults to /opt/$title) destination folder  #
+# options      => (optional) options to pass to the configure   #
+# environment  => (optional) array of environmental variables   #
+# buildDir     => (optional) subfolder from where to build      # 
+# buildArgs     => (optional) arguments of make command          #
+#################################################################
 define build_source::compile(
 	$sourceFolder, 
 	$dest = "/opt/$title", 
 	$options = '', 
 	$environment = '',
-	$postConfigure = '',
 	$buildDir = '',
-	$timeout = '0', 
-	$dependences = '',
-	$make_args = '',
+	$buildArgs = '',
 ) {
-	require stdlib
-	$class_dependences = ['gcc','make','g++']
-	ensure_resource('secure_package',$class_dependences,{})
-	Package[$class_dependences] -> Exec["./configure for $title"]
-	if ($dependences != ''){
-		ensure_resource('secure_package',$dependences,{})
-		Package[$dependences] -> Exec["./configure for $title"]
-	}
-
 	if ($environment != '') {
 		Exec {
 			environment => $environment
@@ -33,7 +31,7 @@ define build_source::compile(
 	Exec {
 		user     => 'root',
 		group    => 'root',
-		timeout  => $timeout,
+		timeout  => 0,
 		path     => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games',
 		cwd      => "$workDir",
 	}
@@ -43,26 +41,15 @@ define build_source::compile(
 		logoutput => 'on_failure',
 		creates   => "$dest",
 	}
-	
 	exec { "make for $title":
-		command => "make $make_args",
+		command => "make $buildArgs",
 		creates => "$dest",
 		require => Exec["./configure for $title"]
 
 	}
-  
 	exec { "make install for $title":
 		command => 'make install',
 		creates => "$dest",
 		require => Exec["make for $title"]
-	}
-
-	if ($postConfigure != ''){
-		exec {"postconfigure of $title":		
-                        command => $postConfigure,
-			creates => $dest,
-                        before  => Exec["make for $title"],
-                        require => Exec["./configure for $title"]
-                }	
 	}
 }
