@@ -1,3 +1,10 @@
-<%= @prefix %>/Modules/default/modulefiles/compilers
-<%= @prefix %>/Modules/default/modulefiles/applications
-<%= @prefix %>/Modules/default/modulefiles/libraries
+##################################
+# File created by Puppet         #
+# MODIFY IT AT YOUR OWN RISK     #
+##################################
+<% @types.each do |type|-%>
+	<%= @prefix %>/Modules/default/modulefiles/<%= @type %>
+<% end -%>
+##################################
+# End of configuration file      #
+##################################

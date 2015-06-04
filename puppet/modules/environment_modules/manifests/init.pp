@@ -1,5 +1,5 @@
 #dependences = tcl8.6-dev tclx8.4-dev
-class environment_modules {
+class environment_modules ($types = []){
 
 	# Installation
 	$ver = "3.2.10"
@@ -18,6 +18,18 @@ class environment_modules {
 		owner => 'root',
 		group => 'root',
 	}
+	define moduleFiles_folders($prefix,{
+		file {"$module_name $title":
+			path => "$prefix/Modules/default/modulefiles/$title",
+			ensure => "directory",
+			mode => '755',
+			require => File["$module_name modulefiles"];
+			
+		}	
+	}
+	$moduleFiles_folders{$types:
+		prefix => $prefix
+	}
 
 	file { 
 	"$module_name default":
@@ -35,21 +47,6 @@ class environment_modules {
 		ensure => "directory",
 		mode => '755',
 		require => File["$module_name default"];
-	"$module_name compilers":
-		path => "$prefix/Modules/default/modulefiles/compilers",
-		ensure => "directory",
-		mode => '755',
-		require => File["$module_name modulefiles"];
-	"$module_name applications":
-		path => "$prefix/Modules/default/modulefiles/applications",
-		ensure => "directory",
-		mode => '755',
-		require => File["$module_name modulefiles"];
-	"$module_name tools":
-		path => "$prefix/Modules/default/modulefiles/tools",
-		ensure => "directory",
-		mode => '755',
-		require => File["$module_name modulefiles"];
 	"$module_name modulespath":
 		path => "$prefix/Modules/default/init/.modulespath",
 		ensure => "file",
