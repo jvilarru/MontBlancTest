@@ -18,9 +18,10 @@ class all {
 node default {
 	include all
 }
-#node 'xubuntu-1404' {
-#	include boost
-#}
+node 'xubuntu-1404' {
+	include environment_modules
+	include gnu_compiler
+}
 node 'laptop' {
 	include all
 }

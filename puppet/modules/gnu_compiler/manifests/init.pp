@@ -9,7 +9,6 @@ class gnu_compiler {
 		env      => ["CFLAGS=$CFLAGS_GMP"],
 		dest     => $GMP_DEST,
 		packages => ["bison","flex"]
-		#packages => ["bison","flex","llvm-dev","clang","libclang-dev"]
 	}
 	
 	#MPFR
@@ -69,15 +68,18 @@ class gnu_compiler {
 		require => [Build_source["cloog"],Build_source["isl"],Build_source["gmp"],Build_source["mpc"],Build_source["mpfr"]]
 	}
 	# Module file
-	#if defined("environment_modules") {
-		#require Build_source["gcc"]
-		Environment_modules::generateModule{"gcc":
+	if defined("environment_modules") {
+		notice("caca")
+		require environment_modules
+		#environment_modules::folder{"test":
+		#	prefix => "/opt/environment_modules/3.12.10"
+		#}
+		environment_modules::generate_module{"gcc":
 			type      => "compilers",
 			prefix    => "$GCC_PREFIX",
-			conflicts => ["gcc"],
-			modname   => "gcc",
 			desc      => "gcc, g++, gfortran",
 			version   => "5.1.0",
+			require   => Build_source["gcc"]
 		}
-	#}
+	}
 }
