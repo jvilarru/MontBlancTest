@@ -16,9 +16,13 @@ class all {
 node default {
 	include all
 }
+class lTest {
+	require stdlib
+	$remoteVar = getvar('environment_modules::prefix')
+	notify{$remoteVar:}
+}
 node 'xubuntu-1404' {
-	include environment_modules
-	include gnu_compiler
+	include extrae
 }
 node 'laptop' {
 	include all
