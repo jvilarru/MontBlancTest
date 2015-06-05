@@ -2,32 +2,32 @@
 proc ModulesHelp { } {
     global version prefix
 
-	puts stderr "\t<%= @APP_NAME %> <%= @APP_VER %> <%= @APP_DESC %>"
+	puts stderr "\t<%= @app_name %> <%= @version %> <%= @APP_DESC %>"
 }
 
-module-whatis "<%= @APP_NAME %> <%= @APP_VER %> <%= @APP_DESC %>"
+module-whatis "<%= @app_name %> <%= @version %> <%= @APP_DESC %>"
 
 module-verbosity {on}
 
-<%# Default = himself %>
-conflict <%= @APP_CONFLICTS %>
+<%# Default = himself -%>
+conflict <% @conflicts.each do |conf| -%><%= conf %> <% end %>
 
 if { [module-info mode] != "whatis" } {
    puts stderr "[module-info mode] [module-info name] (PATH, MANPATH, LD_LIBRARY_PATH)"
 }
 
-set		topdir		<%= @APP_PREFIX %>
-<% if @APP_VER != '' -%>
-set		version		<%= @APP_VER %>
+set		topdir		<%= @prefix %>
+<% if @version != 'default' -%>
+set		version		<%= @version %>
 <% end -%>
 
-<% if File.directory?(@APP_PREFIX+"/bin") -%>
+<% if File.directory?(@prefix+"/bin") -%>
 prepend-path    PATH            $topdir/bin
 <% end -%>
-<% if File.directory?(@APP_PREFIX+"/lib") -%>
+<% if File.directory?(@prefix+"/lib") -%>
 prepend-path    LD_LIBRARY_PATH $topdir/lib
 prepend-path	LD_RUN_PATH		$topdir/lib
 <% end -%>
-<% if File.directory?(@APP_PREFIX+"/share/man") -%>
+<% if File.directory?(@prefix+"/share/man") -%>
 prepend-path    MANPATH         $topdir/share/man
 <% end -%>
