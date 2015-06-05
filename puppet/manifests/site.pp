@@ -23,9 +23,15 @@ node 'laptop' {
 	include all
 }
 node 'davm' {
-	#	include gnu_compiler
-	#	include environment_modules
-	#	include papi
-	#	include fftw
+	include atlas
+	include boost
+	include extrae
+	include fftw
+	include gnu_compiler
+	include hdf5
+	include lapack
+	include mpich
 	include ompss
+	include openmpi
+	include papi
 }

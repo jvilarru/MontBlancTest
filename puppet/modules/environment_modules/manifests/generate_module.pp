@@ -33,18 +33,26 @@ define environment_modules::generate_module(	$type,
 		path    => "$MODULE_FOLDER_PATH/$modname",
 		ensure  => 'directory',
 		mode    => '755',
-		require => Environment_modules::Folder["$type"]
+		require => Environment_modules::Folder["$type"],
+		alias   => "modulefile folder $modname"
 	}
 	
 	if ( $desc != '' ) {
 		$APP_DESC = "($desc)"
 	}
+	if ( $version == '' ) {
+		$APP_VER = "default"
+	} else {
+		$APP_VER = $version
+	}
+	
 	file { "$modname modulefile":
-		path    => "$MODULE_FOLDER_PATH/$modname/$version",
+		path    => "$MODULE_FOLDER_PATH/$modname/$APP_VER",
 		ensure  => 'file',
 		mode    => '644',
 		content => template("environment_modules/generic_module.erb"),
-		require => File["modulefile folder $modname"]
+		require => File["modulefile folder $modname"],
+		alias   => "$modname modulefile"
 	}
 	file { "$modname default_version":
 		path    => "$MODULE_FOLDER_PATH/$modname/.version",
