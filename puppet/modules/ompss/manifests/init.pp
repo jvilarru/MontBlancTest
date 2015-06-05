@@ -5,7 +5,7 @@ class ompss (  $opencl='',
 ){
 	# Some preparations
 	require stdlib
-	$mcxx_dependences = ["bison","flex","gperf","libsqlite3-dev","sqlite3"]
+	$mcxx_dependences = ["bison","flex","gperf","libsqlite3-dev","sqlite3","pkg-config"]
 	ensure_resource('secure_package',$mcxx_dependences,{})
 
 	# Download the OmpSs tarball
@@ -23,17 +23,20 @@ class ompss (  $opencl='',
 	}
 	exec {"rename nanox folder":
 		command => "mv /usr/src/ompss/nanox-* /usr/src/ompss/nanox",
-		require => Build_source::Archive["$module_name download and extraction"]
+		require => Build_source::Archive["$module_name download and extraction"],
+		creates => "/usr/src/ompss/nanox"
 	}
 	exec {"rename mercurium folder":
 		command => "mv /usr/src/ompss/mcxx-* /usr/src/ompss/mcxx",
-		require => Build_source::Archive["$module_name download and extraction"]
+		require => Build_source::Archive["$module_name download and extraction"],
+		creates => "/usr/src/ompss/mcxx"
 	}
 
 	# Compile Nanox
 	$NANOX_CFLAGS="-O3"
 	$NANOX_CXXFLAGS="-O3"
 	$NANOX_FCFLAGS="-O3"
+	$NANOX_PREFIX="/opt/ompss/nanox"
 	build_source::compile{"$module_name nanox compilation":
 		sourceFolder => "/usr/src/ompss/nanox",
 		environment  => ["CFLAGS=$NANOX_CFLAGS","CXXFLAGS=$NANOX_CXXFLAGS","FCFLAGS=$NANOX_FCFLAGS"],
