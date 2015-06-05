@@ -1,25 +1,25 @@
 #########################################################################
 # This module is used to install software from sources 			#
 # Parameters:							  	#
-# type      => (default = 'configure') it is used to specify the type 	#
-#	       of build required by the software			#
-# url       => url of the software files, i can be a git repository or  #
-#	       a compressed package(see archive.pp for more info)	#
-# env       => (optional) Array of environment variables		#
-# options   => (optional) options for the configuration of the software	#
-# version   => (optional) version of the software(used to infer the 	#
-#	       destination folder) more details at Folders section	#
-# srcDest   => (optional) Location of the source files			#
-# dest      => (optional) Where to install the software			#
-# defPrefix => (default = /opt) part of the install folder path when 	#
-#	       no dest is specified, more details at Folders section	#
-# buildDir  => (optional) Subfolder where to build the software		# 
-# builder   => (optional and only useful to bootstrap) name of the 	#
-#	       binary that is in chanrge of building and installing	#
-# configDir => (optional) Subfolder where to fins the configure tool	#
-# preConf   => (optional) command to execute before the configuration	# 
-# packages  => (optional) array of the packages needed by this software	#
-# buildArgs => (optional) arguments to pass to the builder		#
+#   type      => (default = 'configure') it is used to specify the type	#
+#                of build required by the software			#
+#   url       => url of the software files, it can be a git repository 	#
+#                or a compressed package(see archive.pp for more info)	#
+#   env       => (optional) Array of environment variables		#
+#   options   => (optional) options for the software configuration 	#
+#   version   => (optional) version of the software(used to infer the 	#
+#                destination folder) more details at Folders section	#
+#   srcDest   => (optional) Location of the source files		#
+#   dest      => (optional) Where to install the software		#
+#   defPrefix => (default = /opt) part of the install folder path when 	#
+#                no dest is specified, more details at Folders section	#
+#   buildDir  => (optional) Subfolder where to build the software	# 
+#   builder   => (optional and only useful to bootstrap) name of the 	#
+#                binary that is in chanrge of building and installing	#
+#   configDir => (optional) Subfolder where to fins the configure tool	#
+#   preConf   => (optional) command to execute before the configuration	# 
+#   packages  => (optional) array of packages needed by this software	#
+#   buildArgs => (optional) arguments to pass to the builder		#
 # Folders:								#
 #   Source folder  => If srcDest is undefined, the source folder is:	#
 #		      /usr/src/$name/$version				#
@@ -27,6 +27,15 @@
 #		      $defPrefix/$name/$version 			#
 #   In both cases if version is unspecified the $version subfolder will #
 #   not be created							#
+# module_ Parameters:							#
+#   module_type      => With this option it is specified the type of 	#
+#		        software we are installing, if this parameter 	#
+#			is set the environment module is created	#
+#   module_app_name  => (optional) The name given to the environment	#
+#		        module						#
+#   module_conflicts => (optional) Array of the modulename that 	#
+#			conflict with this module			#
+#   module_desc      => (optional) Brief description of this software 	#
 #########################################################################
 define build_source (	$type = 'configure',
 			$url,
@@ -43,7 +52,11 @@ define build_source (	$type = 'configure',
 			$configDir = '',
 			$preConf ='',
 			$packages ='',
-			$buildArgs = ''
+			$buildArgs = '',
+			$module_type = '',
+			$module_app_name = '',
+			$module_conflicts ='',
+			$module_desc = '',
 ){
 	require stdlib
 	if($srcDest == ''){
@@ -162,5 +175,31 @@ define build_source (	$type = 'configure',
         	}
 		default: {}
 	} 
+	#Module stuff
+	if($module_type != '') {
+		if($module_app_name != ''){
+			$mod_app_name = $module_app_name
+		} else {
+			$mod_app_name = upcase("$title")
+		}
+		if($module_conflicts != ''){
+			$mod_conflicts = $module_conflicts
+		} else {
+			$mod_conflicts = [$title]
+		}
+		if($module_desc != ''){
+			$mod_desc = $module_desc
+		} else {
+			$mod_desc = ''
+		}
+		environment_modules::generate_module{$title:
+			type      => $module_type,
+			version   => $version,
+			prefix    => $destFolder,
+			app_name  => $mod_app_name,
+			conflicts => $mod_conflicts,
+			desc      => $mod_desc,
+		}
+	}
 }
 
