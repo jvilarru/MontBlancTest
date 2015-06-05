@@ -1,11 +1,7 @@
 define secure_package {
 	require stdlib
-	ensure_resource('exec','apt-update',{'command' => "/usr/bin/apt-get update",'user'=>'root','group'=>'root','refreshonly' => 'true'})
-	exec{"$title not installed":
-		command => "echo noop",
-		path    => "/bin:/usr/bin",
-		notify  => Exec["apt-update"],
-		unless  => "dpkg -l $title",
-	}
-	ensure_resource('package',$title,{'ensure' => 'installed','require' => Exec["apt-update"]})
+	$command = "/bin/sh -c '[ ! -f /var/cache/apt/pkgcache.bin ] || /usr/bin/find /etc/apt/* -cnewer /var/cache/apt/pkgcache.bin | /bin/grep . > /dev/null'"
+	ensure_resource('exec','apt-update',{'command' => "/usr/bin/apt-get update",'user'=>'root','group'=>'root','onlyif' => "$command"})
+	ensure_packages($title)
+	Exec['apt-update'] -> Package<| |>
 }

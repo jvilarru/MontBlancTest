@@ -7,10 +7,8 @@ class gnu_compiler {
 	build_source{"gmp":
 		url      => "https://gmplib.org/download/gmp/gmp-6.0.0a.tar.xz",
 		env      => ["CFLAGS=$CFLAGS_GMP"],
-		options  => template("$module_name/options_gmp.erb"),
 		dest     => $GMP_DEST,
-		#		packages => ["bison","flex"]
-		packages => ["bison","flex","llvm-dev","clang","libclang-dev"]
+		packages => ["bison","flex"]
 	}
 	
 	#MPFR
@@ -33,7 +31,7 @@ class gnu_compiler {
 		env     => ["CFLAGS=$CFLAGS_MPC"],
 		options => template("$module_name/options_mpc.erb"),
 		dest	=> $MPC_DEST,
-		require => Build_source["mpfr"]
+		require => [Build_source["mpfr"],Build_source["gmp"]]
 	}
 	#ISL
 	$CFLAGS_ISL="-O3 -fPIC"
@@ -44,8 +42,8 @@ class gnu_compiler {
 		env      => ["CFLAGS=$CFLAGS_ISL"],
 		options  => template("$module_name/options_isl.erb"),
 		dest 	 => $ISL_DEST,
-		require  =>  Build_source["mpc"],
-		#	packages => ["llvm-dev","clang","libclang-dev"]
+		require  =>  Build_source["gmp"],
+		packages => ["llvm-dev","clang","libclang-dev"]
 	}
 	#CLOOG
 	$CFLAGS_CLOOG="-O3 -fPIC"
@@ -56,7 +54,7 @@ class gnu_compiler {
 		env     => ["CFLAGS=$CFLAGS_CLOOG"],
 		options => template("$module_name/options_cloog.erb"),
 		dest	=> $CLOOG_DEST,
-		require => Build_source["isl"]
+		require => [Build_source["isl"],Build_source["gmp"]]
 	}
 	#GCC
 	$CFLAGS_GCC="-O3"
@@ -67,18 +65,21 @@ class gnu_compiler {
 		env     => ["CFLAGS=$CFLAGS_GCC"],
 		dest    => $GCC_PREFIX,
 		options => template("$module_name/options_gcc.erb"),
-		require =>  Build_source["cloog"]
+		require => [Build_source["cloog"],Build_source["isl"],Build_source["gmp"],Build_source["mpc"],Build_source["mpfr"]]
 	}
 	# Module file
 	if defined("environment_modules") {
-		require Build_source["gcc"]
-		Environment_modules::generateModule { "gcc":
-			$type      => "compilers",
-			$prefix    => "$GCC_PREFIX",
-			$conflicts => ["gcc"],
-			$modname   => "gcc",
-			$desc      => "gcc, g++, gfortran",
-			$version   => "5.1.0",
+		notice("caca")
+		require environment_modules
+		#environment_modules::folder{"test":
+		#	prefix => "/opt/environment_modules/3.12.10"
+		#}
+		environment_modules::generate_module{"gcc":
+			type      => "compilers",
+			prefix    => "$GCC_PREFIX",
+			desc      => "gcc, g++, gfortran",
+			version   => "5.1.0",
+			require   => Build_source["gcc"]
 		}
 	}
 }

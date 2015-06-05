@@ -1,14 +1,22 @@
 ################################################################################
 ################################################################################
-# $type = module type (compiler, application, tool, etc.)
-# $prefix = installation path
-# $conflicts = array containing all the conflicts of the modulefile
-# $app = application name
-# $modname = name of the module, spaces are not allowed
-# $version = version of the application, needed to make default this module
+# This modules is used to ....
+# Parameters:
+#   type => module type (compiler, application, tool, etc.)
+#   prefix => installation path
+#   conflicts => array containing all the conflicts of the modulefile
+#   desc => application name
+#   modname => name of the module, spaces are not allowed
+#   version => version of the application, needed to make default this module
 ################################################################################
 ################################################################################
-define environment_modules::generateModule ( $type, $prefix, $conflicts = [], $modname, $desc = '', $version = '') {
+define environment_modules::generate_module(	$type,
+					$prefix,
+					$modname=$title,
+					$conflicts=[$modname],
+					$desc='',
+					$version=''
+){
 	$MODULEFILES_PATH = "/opt/environment_modules/3.2.10/Modules/default/modulefiles/$type"
 	
 	if ( $desc != '' ) {
@@ -27,7 +35,6 @@ define environment_modules::generateModule ( $type, $prefix, $conflicts = [], $m
 		mode   => '755'
 	}
 	
-	
 	if ( $version != '' ) {
 		$APP_VER = $version
 		$APP_PREFIX = $prefix
@@ -37,8 +44,9 @@ define environment_modules::generateModule ( $type, $prefix, $conflicts = [], $m
 			ensure  => 'file',
 			mode    => '644',
 			content => template("environment_modules/generic_module.erb"),
-			require => File["modulefile folder $type"]
-		"default_version":
+			require => File["modulefile folder $type"
+		}
+		file { "default_version":
 			path    => "$MODULEFILES_PATH/$modname/.version",
 			ensure  => file,
 			content => template("environment_modules/generic_version.erb"),
@@ -55,7 +63,8 @@ define environment_modules::generateModule ( $type, $prefix, $conflicts = [], $m
 			mode    => '644',
 			content => template("environment_modules/generic_module.erb"),
 			require => File["modulefile folder $type"]
-		"default_version":
+		}
+		file { "default_version":
 			path    => "$MODULEFILES_PATH/$modname/.version",
 			ensure  => file,
 			content => template("environment_modules/generic_version.erb"),
