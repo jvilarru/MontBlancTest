@@ -10,7 +10,7 @@ class all {
 	include boost
 	include lapack
 	#include atlas
-	#include gnu_compiler
+	include gnu_compiler
 	class {"environment_modules":
 		types => ['compilers','tools','applications']
 	}
