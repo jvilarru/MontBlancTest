@@ -1,0 +1,16 @@
+AuthType=auth/munge
+AuthInfo=/var/run/munge/munge.socket.2
+
+DbdHost=<%= @accounting_host -%>
+SlurmUser=slurm
+MessageTimeout=30
+
+LogFile=<%= @slurmdir -%>/var/log/slurmdbd.log
+PidFile=<%= @slurmdir -%>/var/slurmdbd.pid
+PluginDir=<%= @libdir -%>/slurm
+
+StorageType=accounting_storage/mysql
+StorageHost=<%= @accounting_host -%>
+StorageUser=slurm
+StoragePass=<%= @db_slurm_pass -%>
+StorageLoc=slurm_acct_db.
