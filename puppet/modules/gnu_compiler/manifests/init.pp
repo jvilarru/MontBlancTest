@@ -68,6 +68,8 @@ class gnu_compiler {
 		require         => [Build_source["cloog"],Build_source["isl"],Build_source["gmp"],Build_source["mpc"],Build_source["mpfr"]],
 		module_type     => "compilers",
 		module_app_name => "gcc",
-		module_desc     => "GNU Compiler Suite"
+		module_modname  => "gcc",
+		module_desc     => "GNU Compiler Suite",
+		version         => "5.1.0"
 	}
 }
