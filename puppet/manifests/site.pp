@@ -29,7 +29,6 @@ node 'laptop' {
 	include all
 }
 node 'davm' {
-	include atlas
 	include boost
 	include extrae
 	include fftw
