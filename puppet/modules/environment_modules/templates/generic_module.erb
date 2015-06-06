@@ -12,6 +12,15 @@ module-verbosity {on}
 <%# Default = himself -%>
 conflict <% @conflicts.each do |conf| -%><%= conf %> <% end %>
 
+<% if @app_name == 'extrae' -%>
+set EXTRAE_LOCATION /opt/extrae
+if { [ is-loaded mpich ] } {
+	set EXTRAE_HOME	${EXTRAE_LOCATION}/<%= @version -%>/mpich
+} elseif { [ is-loaded openmpi ] } {
+	set EXTRAE_HOME ${EXTRAE_LOCATION}/<%= @version -%>/openmpi
+}
+<% end -%>
+
 if { [module-info mode] != "whatis" } {
    puts stderr "[module-info mode] [module-info name] (PATH, MANPATH, LD_LIBRARY_PATH)"
 }
@@ -30,4 +39,7 @@ prepend-path	LD_RUN_PATH		$topdir/lib
 <% end -%>
 <% if File.directory?(@prefix+"/share/man") -%>
 prepend-path    MANPATH         $topdir/share/man
+<% end -%>
+<% if @app_name == 'extrae' -%>
+prepend-path	EXTRAE_HOME		${EXTRAE_HOME}
 <% end -%>
