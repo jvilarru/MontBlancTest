@@ -22,10 +22,13 @@ class atlas (  $archdef='',
 	}
 	$CFLAGS="-O3"
 	build_source{"$module_name":
-		url       => "http://sourceforge.net/projects/math-atlas/files/Developer%20%28unstable%29/3.11.34/atlas3.11.34.tar.bz2",
-		version   => "3.11.34",
-		buildDir  => "$::architecture",
-		buildArgs => "build",
-		packages  => ["gfortran"]
+		url             => "http://sourceforge.net/projects/math-atlas/files/Developer%20%28unstable%29/3.11.34/atlas3.11.34.tar.bz2",
+		version         => "3.11.34",
+		buildDir        => "$::architecture",
+		buildArgs       => "build",
+		packages        => ["gfortran"],
+		module_type     => "sci-libs",
+		module_app_name => "atlas",
+		module_desc     => "Automatically Tunned Linear Algebra Software"
 	}
 }

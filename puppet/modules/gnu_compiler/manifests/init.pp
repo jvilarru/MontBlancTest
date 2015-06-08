@@ -61,21 +61,13 @@ class gnu_compiler {
 	$GCC_VER="5.1.0"
 	$GCC_PREFIX="/opt/gcc/$GCC_VER"
 	build_source{"gcc":
-		url     => "http://mirror1.babylon.network/gcc/releases/gcc-5.1.0/gcc-5.1.0.tar.gz",
-		env     => ["CFLAGS=$CFLAGS_GCC"],
-		dest    => $GCC_PREFIX,
-		options => template("$module_name/options_gcc.erb"),
-		require => [Build_source["cloog"],Build_source["isl"],Build_source["gmp"],Build_source["mpc"],Build_source["mpfr"]]
-	}
-	# Module file
-	if defined("environment_modules") {
-		environment_modules::generate_module{"gcc":
-			type    => "compilers",
-			prefix  => "$GCC_PREFIX",
-			app_name    => "GNU Compiler Suite",
-			desc    => "gcc, g++, gfortran",
-			version => "5.1.0",
-			require => [Build_source["gcc"],Build_source['environment_modules']]
-		}
+		url             => "http://mirror1.babylon.network/gcc/releases/gcc-5.1.0/gcc-5.1.0.tar.gz",
+		env             => ["CFLAGS=$CFLAGS_GCC"],
+		dest            => $GCC_PREFIX,
+		options         => template("$module_name/options_gcc.erb"),
+		require         => [Build_source["cloog"],Build_source["isl"],Build_source["gmp"],Build_source["mpc"],Build_source["mpfr"]],
+		module_type     => "compilers",
+		module_app_name => "gcc",
+		module_desc     => "GNU Compiler Suite"
 	}
 }

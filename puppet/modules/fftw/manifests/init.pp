@@ -13,13 +13,16 @@ class fftw{
 		packages => ["gfortran"]
 	}
 	build_source{"$module_name double precision":
-		url      => "http://www.fftw.org/fftw-3.3.4.tar.gz",
-		srcDest  => "/usr/src/fftw/3.3.4",
-		env	     => ["CFLAGS=$CFLAGS","FFLAGS=$FFLAGS"],
-		buildDir => "double_precision",
-		dest     => "/opt/fftw/3.3.4",
-		options  => "--enable-fma --enable-threads --enable-shared",
-		version  => "3.3.4",
+		url             => "http://www.fftw.org/fftw-3.3.4.tar.gz",
+		srcDest         => "/usr/src/fftw/3.3.4",
+		env	            => ["CFLAGS=$CFLAGS","FFLAGS=$FFLAGS"],
+		buildDir        => "double_precision",
+		dest            => "/opt/fftw/3.3.4",
+		options         => "--enable-fma --enable-threads --enable-shared",
+		version         => "3.3.4",
+		module_type     => "sci-libs",
+		module_app_name => "fftw",
+		module_desc     => "Fastest Fourier Transform in the West"
 	}
 
 	exec { "merge libraries":
