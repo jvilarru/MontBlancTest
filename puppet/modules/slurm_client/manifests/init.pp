@@ -1,4 +1,4 @@
-class slurm {
+class slurm_client {
 	# installation
 	build_source{"$module_name":
 		url      => "$module_name/slurm-14.11.7.tar.bz2",
