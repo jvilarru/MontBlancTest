@@ -1,6 +1,5 @@
 #dependences = g++, gfortran, libcr-dev
-class mpich (  $blcr='',
-		$slurm='',
+class mpich ( $slurm='',
 ){
 	$CFLAGS="-O3"
 	$FCFLAGS="-O3"
