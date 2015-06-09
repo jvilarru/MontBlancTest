@@ -1,8 +1,12 @@
-define test ($type='configure') {
-	case $type {
-		'cmake': { notice("$title --> $type")}
-		'configure': { notice("$title --> $type")}
-		'booststrap': { notice("$title --> $type")}
-		default: { fail('Type of installation not supported')}
+define test{
+	$unwind = 'a'
+	$papi = 'b'
+	$mpi = 'c'
+	$opencl = 'd'
+	$boost = 'e'
+	$fft = 'f'
+	file{"/tmp/$title":
+		ensure  => file,
+		content => template("test/options.erb")
 	}
 }

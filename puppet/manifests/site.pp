@@ -23,7 +23,7 @@ node default {
 	include all
 }
 node 'xubuntu-1404' {
-	include all
+	test{"prova":}
 }
 node 'laptop' {
 	include all
