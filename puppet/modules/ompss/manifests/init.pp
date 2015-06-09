@@ -9,10 +9,9 @@ class ompss (  $opencl='',
 	ensure_resource('secure_package',$mcxx_dependences,{})
 
 	# Download the OmpSs tarball
-	build_source::archive{"$module_name download and extraction":
+	build_source::archive{"$module_name":
 		url     => "http://pm.bsc.es/sites/default/files/ftp/ompss/releases/ompss-latest.tar.gz",
-		dest    => "/usr/src/ompss",
-		creates => "/usr/src/ompss",
+		creates => "mcxx"
 	}
 
 	# We need to rename the folders...
@@ -23,12 +22,12 @@ class ompss (  $opencl='',
 	}
 	exec {"rename nanox folder":
 		command => "mv /usr/src/ompss/nanox-* /usr/src/ompss/nanox",
-		require => Build_source::Archive["$module_name download and extraction"],
+		require => Build_source::Archive["$module_name"],
 		creates => "/usr/src/ompss/nanox"
 	}
 	exec {"rename mercurium folder":
 		command => "mv /usr/src/ompss/mcxx-* /usr/src/ompss/mcxx",
-		require => Build_source::Archive["$module_name download and extraction"],
+		require => Build_source::Archive["$module_name"],
 		creates => "/usr/src/ompss/mcxx"
 	}
 
@@ -37,23 +36,24 @@ class ompss (  $opencl='',
 	$NANOX_CXXFLAGS="-O3"
 	$NANOX_FCFLAGS="-O3"
 	$NANOX_PREFIX="/opt/ompss/nanox"
-	build_source::compile{"$module_name nanox compilation":
+	build_source::compile{"$module_name nanox":
 		sourceFolder => "/usr/src/ompss/nanox",
 		environment  => ["CFLAGS=$NANOX_CFLAGS","CXXFLAGS=$NANOX_CXXFLAGS","FCFLAGS=$NANOX_FCFLAGS"],
 		options      => template("$module_name/nanox_options.erb"),
-		dest         => "/opt/ompss/nanox",
-		require      => [Exec["rename nanox folder"],Build_source::Archive["$module_name download and extraction"]]
+		dest         => $NANOX_PREFIX,
+		require      => [Exec["rename nanox folder"],Build_source::Archive["$module_name"]]
 	}
 	
 	# Compile Mercurium
 	$MCXX_CFLAGS="-O3"
 	$MCXX_CXXFLAGS="-O3"
 	$MCXX_FCFLAGS="-O3"
-	Secure_package[$mcxx_dependences] -> build_source::compile{"$module_name mcxx compilation":
+	build_source::compile{"$module_name mcxx":
 		sourceFolder => "/usr/src/ompss/mcxx",
 		environment  => ["CFLAGS=$MCXX_CFLAGS","CXXFLAGS=$MCXX_CXXFLAGS","FCFLAGS=$MCXX_FCFLAGS"],
 		options      => template("$module_name/mcxx_options.erb"),
 		dest         => "/opt/ompss/mcxx",
-		require       => [Exec["rename mercurium folder"],Build_source::Compile["$module_name nanox compilation"]]
+		require       => [Exec["rename mercurium folder"],Build_source::Compile["$module_name nanox"]]
 	}
+	Secure_package[$mcxx_dependences] -> Build_source::Compile["$module_name mcxx"]
 }

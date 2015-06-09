@@ -31,8 +31,10 @@
 #   module_type      => With this option it is specified the type of 	#
 #		        software we are installing, if this parameter 	#
 #			is set the environment module is created	#
-#   module_app_name  => (optional) The name given to the environment	#
+#   module_modname   => (optional) The name given to the environment	#
 #		        module						#
+#   module_app_name  => (optional) The (long) name given to the 	#
+#		        environment module				#
 #   module_conflicts => (optional) Array of the modulename that 	#
 #			conflict with this module			#
 #   module_desc      => (optional) Brief description of this software 	#
@@ -54,6 +56,7 @@ define build_source (	$type = 'configure',
 			$packages ='',
 			$buildArgs = '',
 			$module_type = '',
+			$module_modname = '',
 			$module_app_name = '',
 			$module_conflicts ='',
 			$module_desc = '',
@@ -177,6 +180,11 @@ define build_source (	$type = 'configure',
 	} 
 	#Module stuff
 	if($module_type != '') {
+		if($module_modname != ''){
+			$mod_modname = $module_app_name
+		} else {
+			$mod_modname = $title
+		}
 		if($module_app_name != ''){
 			$mod_app_name = $module_app_name
 		} else {
@@ -196,6 +204,7 @@ define build_source (	$type = 'configure',
 			type      => $module_type,
 			version   => $version,
 			prefix    => $destFolder,
+			modname   => $mod_modname,
 			app_name  => $mod_app_name,
 			conflicts => $mod_conflicts,
 			desc      => $mod_desc,
