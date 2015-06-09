@@ -1,3 +1,4 @@
+#IDEA: pillar el basename, clustername i demas de el hostname
 class slurm_client ( $basename,
 			$init_node_number,
 			$end_node_number,
@@ -11,7 +12,6 @@ class slurm_client ( $basename,
 	build_source{"$module_name":
 		url      => "$module_name/slurm-14.11.7.tar.bz2",
 		options  => template("$module_name/options.erb"),
-		dest     => "/opt/slurm/14.11.7",
 		version  => "14.11.7",
 		packages => ["munge","libmunge-dev","libcr-dev","libpam0g-dev","libssl-dev","openssl","libmysqld-dev","mysql-common","pkg-config","libxml2-dev","hwloc","libmysqlclient-dev","libhwloc-dev"]
 	}
@@ -20,14 +20,14 @@ class slurm_client ( $basename,
 	group { "$module_name group":
 		name   => "slurm",
 		ensure => present,
-		gid    => "999",
-		system => "yes"
+		gid    => 999,
+		system => true
 	}
 	user {  "$module_name user":
-		name    => "slurm",
+		name    => "$module_name",
 		ensure  => present,
 		uid     => '999',
-		system  => "yes",
+		system  => true,
 		gid     => '999',
 		require => Group["$module_name group"]
 	}
@@ -50,15 +50,7 @@ class slurm_client ( $basename,
 	$nProcessors = $::processorcount
 	$nSockets = $::physicalprocessorcount
 	$memory = $::memorysize_mb
-	$node_basename = $basename
-	$init_number_node = $init_node_number
-	$end_number_node = $end_node_number
-	$cluster_name = $clustername
-	$accounting_host = $accounting_hostname
-	$controller = $controller_hostname
-	$controller_ip = $controller_ip_address
 
-	$db_slurm_pass = $slurmdbd_pass
 
 	file {
 	"$module_name sysconfdir folder":
@@ -68,8 +60,7 @@ class slurm_client ( $basename,
 	"$module_name script folder":
 		ensure  => directory,
 		mode    => '755',
-		path    => "$sysconfdir/scripts",
-		require => File["$module_name sysconfdir folder"];
+		path    => "$sysconfdir/scripts";
 	"$module_name var folder":
 		ensure => directory,
 		mode   => '755',
@@ -77,13 +68,11 @@ class slurm_client ( $basename,
 	"$modeule_name var_log folder":
 		ensure  => directory,
 		mode    => '755',
-		path    => "$slurmdir/var/log",
-		require => File["$module_name var folder"];
+		path    => "$slurmdir/var/log";
 	"$modeule_name var_slurm folder":
 		ensure => directory,
 		mode   => '755',
-		path   => "$slurmdir/var/slurm",
-		require => File["$module_name var folder"];
+		path   => "$slurmdir/var/slurm";
 	}
 
 	# SLURM Files
@@ -101,7 +90,9 @@ class slurm_client ( $basename,
 		group     => 'root',
 		content   => template("$module_name/ldconfig.erb"),
 		path      => "/etc/ld.so.conf.d/slurm.conf";
-		#	trigger => Exec["$module_name ldconfig"];
+		#	trigger => Exec["$module_name ldconfig"]; 
+		#   	PORQUE NO?
+		#	Si es buena idea
 	"$module_name slurm configuration file":
 		ensure  => file,
 		path    => "$sysconfdir/slurm.conf",

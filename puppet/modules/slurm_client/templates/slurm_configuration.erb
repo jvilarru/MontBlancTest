@@ -1,5 +1,5 @@
-ControlMachine=<%= @controller -%>
-ControlAddr=<%= @controller_ip -%>
+ControlMachine=<%= @controller_hostname -%>
+ControlAddr=<%= @controller_ip_address -%>
 
 AuthType=auth/munge
 CacheGroups=0
@@ -51,11 +51,11 @@ SchedulerType=sched/backfill
 SchedulerPort=7321
 SelectType=select/linear
 
-AccountingStorageHost=<%= @accounting_host -%>
+AccountingStorageHost=<%= @accounting_hostname -%>
 AccountingStorageLoc=<%= @slurmdir -%>/var/log/job_acct.log
 AccountingStorageType=accounting_storage/slurmdbd
 
-ClusterName=<%= @cluster_name -%>
+ClusterName=<%= @clustername -%>
 
 JobCompLoc=<%= @slurmdir -%>/var/log/jobs_complete.log
 JobCompType=jobcomp/filetxt
@@ -77,6 +77,6 @@ RoutePlugin=route/default
 
 #MailProg=/usr/bin/mail
 
-NodeName=<%= @node_basename -%>-[<%= @init_number_node -%>-<%= @end_number_node -%>] Socket=<%= @nSockets -%> CoresPerSocket=<%= @nProcessors -%> ThreadsPerCore=1 RealMemory=<%= @memory -%> State=UNKNOWN
+NodeName=<%= @basename -%>-[<%= @init_node_number -%>-<%= @end_node_number -%>] Socket=<%= @nSockets -%> CoresPerSocket=<%= @nProcessors -%> ThreadsPerCore=1 RealMemory=<%= @memory -%> State=UNKNOWN
 
-PartitionName=default Nodes=<%= @node_basename -%>-[<%= @init_number_node -%>-<%= @end_number_node -%>] Default=YES MaxTime=10:00:00 State=UP Priority=0 Shared=EXCLUSIVE
+PartitionName=default Nodes=<%= @basename -%>-[<%= @init_node_number -%>-<%= @end_node_number -%>] Default=YES MaxTime=10:00:00 State=UP Priority=0 Shared=EXCLUSIVE
