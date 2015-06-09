@@ -22,6 +22,7 @@ class fftw{
 		version         => "3.3.4",
 		module_type     => "sci-libs",
 		module_app_name => "fftw",
+		module_modname  => "fftw",
 		module_desc     => "Fastest Fourier Transform in the West"
 	}
 
