@@ -21,14 +21,5 @@ node 'laptop' {
 	include all
 }
 node 'davm' {
-	include boost
-	include extrae
-	include fftw
-	include gnu_compiler
-	include hdf5
-	include lapack
-	include mpich
-	include ompss
-	include openmpi
-	include papi
+	include slurm_client
 }
