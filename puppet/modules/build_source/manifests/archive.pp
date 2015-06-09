@@ -22,8 +22,8 @@ define build_source::archive(
 		timeout => $timeout,
 		path    => '/usr/bin:/bin',
 	}
-	#	$pathComplet = getPaths($dest)
-	ensure_resource('file',$dest,{'ensure' => 'directory','owner' => 'root', 'group' => 'root'})
+	$pathComplet = getPaths($dest)
+	ensure_resource('file',$pathComplet,{'ensure' => 'directory','owner' => 'root', 'group' => 'root'})
 	
 	if ($url =~ /^http(s)?:\/\// or $url =~ /^ftp:\/\//) {
 		exec { "Download $title":

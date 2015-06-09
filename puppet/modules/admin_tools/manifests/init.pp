@@ -1,5 +1,5 @@
 class admin_tools {
 	include stdlib
 	$packages = ['screen','vim','bash-completion','command-not-found','htop','mlocate','zsh','bc']
-	ensure_resource('secure_package',$packages,{})
+	ensure_packages($packages)
 }
