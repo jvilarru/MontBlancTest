@@ -16,6 +16,7 @@ define build_source::compile(
 	$buildDir = '',
 	$buildArgs = '',
 ) {
+	include stdlib
 	if ($environment != '') {
 		Exec {
 			environment => $environment

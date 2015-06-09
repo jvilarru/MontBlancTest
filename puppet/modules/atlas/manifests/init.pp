@@ -11,7 +11,7 @@ class atlas (  $archdef='',
 			before  => Build_source["$module_name"]
 		}
 	}
-	require stdlib
+	include stdlib
 	$cpus = range(0,$::processorcount-1)
 	core_performance{$cpus:}
 	file { "lapack .tar.gz functions for atlas":

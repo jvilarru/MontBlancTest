@@ -19,7 +19,6 @@ define environment_modules::generate_module(	$type,
 					$version='default'
 ){
 	require stdlib
-	require environment_modules
 	$envPrefix = $::environment_modules::prefix
 	File {
 		owner => 'root',

@@ -6,7 +6,8 @@ class ompss (  $opencl='',
 	# Some preparations
 	require stdlib
 	$mcxx_dependences = ["bison","flex","gperf","libsqlite3-dev","sqlite3","pkg-config"]
-	ensure_resource('secure_package',$mcxx_dependences,{})
+	ensure_packages($mcxx_dependences)
+	Package[$mcxx_dependences] -> Build_source::Compile["$module_name mcxx"]
 
 	# Download the OmpSs tarball
 	build_source::archive{"$module_name":
@@ -41,7 +42,7 @@ class ompss (  $opencl='',
 		environment  => ["CFLAGS=$NANOX_CFLAGS","CXXFLAGS=$NANOX_CXXFLAGS","FCFLAGS=$NANOX_FCFLAGS"],
 		options      => template("$module_name/nanox_options.erb"),
 		dest         => $NANOX_PREFIX,
-		require      => [Exec["rename nanox folder"],Build_source::Archive["$module_name"]]
+		require      => Exec["rename nanox folder"]
 	}
 	
 	# Compile Mercurium
@@ -55,5 +56,4 @@ class ompss (  $opencl='',
 		dest         => "/opt/ompss/mcxx",
 		require       => [Exec["rename mercurium folder"],Build_source::Compile["$module_name nanox"]]
 	}
-	Secure_package[$mcxx_dependences] -> Build_source::Compile["$module_name mcxx"]
 }

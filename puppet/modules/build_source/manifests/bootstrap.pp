@@ -19,6 +19,7 @@ define build_source::bootstrap(
 	$buildDir = '',
 	$buildArgs = '',
 ) {
+	include stdlib
 	if ($environment != '') {
 		Exec {
 			environment => $environment

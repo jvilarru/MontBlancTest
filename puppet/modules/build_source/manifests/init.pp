@@ -61,7 +61,7 @@ define build_source (	$type = 'configure',
 			$module_conflicts ='',
 			$module_desc = '',
 ){
-	require stdlib
+	include stdlib
 	if($srcDest == ''){
                 if($version == ''){
                         $sourceFolder = "/usr/src/$name"
@@ -100,9 +100,11 @@ define build_source (	$type = 'configure',
         }
 	if($packages != ''){
 		$allDeps = concat($packages,$generalDependences)
-		ensure_resource('secure_package',$allDeps,{})
-		Secure_package[$packages] -> $reqInst
+	} else {
+		$allDeps = $generalDependences
 	}
+	ensure_packages($allDeps)
+	Package[$allDeps] -> $reqInst
 	if($dest == ''){
                 if($version == ''){
                         $destFolder = "$defPrefix/$name"
@@ -179,35 +181,38 @@ define build_source (	$type = 'configure',
 		default: {}
 	} 
 	#Module stuff
-	if($module_type != '') {
-		if($module_modname != ''){
-			$mod_modname = $module_app_name
-		} else {
-			$mod_modname = $title
-		}
-		if($module_app_name != ''){
-			$mod_app_name = $module_app_name
-		} else {
-			$mod_app_name = upcase("$title")
-		}
-		if($module_conflicts != ''){
-			$mod_conflicts = $module_conflicts
-		} else {
-			$mod_conflicts = [$title]
-		}
-		if($module_desc != ''){
-			$mod_desc = $module_desc
-		} else {
-			$mod_desc = ''
-		}
-		environment_modules::generate_module{$title:
-			type      => $module_type,
-			version   => $version,
-			prefix    => $destFolder,
-			modname   => $mod_modname,
-			app_name  => $mod_app_name,
-			conflicts => $mod_conflicts,
-			desc      => $mod_desc,
+	if defined(Class['environment_modules']){
+		if($module_type != '') {
+			if($module_modname != ''){
+				$mod_modname = $module_app_name
+			} else {
+				$mod_modname = $title
+			}
+			if($module_app_name != ''){
+				$mod_app_name = $module_app_name
+			} else {
+				$mod_app_name = upcase("$title")
+			}
+			if($module_conflicts != ''){
+				$mod_conflicts = $module_conflicts
+			} else {
+				$mod_conflicts = [$title]
+			}
+			if($module_desc != ''){
+				$mod_desc = $module_desc
+			} else {
+				$mod_desc = ''
+			}
+			environment_modules::generate_module{$title:
+				type      => $module_type,
+				version   => $version,
+				prefix    => $destFolder,
+				modname   => $mod_modname,
+				app_name  => $mod_app_name,
+				conflicts => $mod_conflicts,
+				desc      => $mod_desc,
+				require   => $reqInst,
+			}
 		}
 	}
 }

@@ -1,16 +1,8 @@
 class all {
-	include fftw
-	include ompss
-	include mpich
-	include extrae
-	include openmpi
-	include papi
-	include hdf5
-	include boost
-	include lapack
-	#include atlas
-	include gnu_compiler
-	include environment_modules
+	include apt
+	include scientific_libraries
+	include tools
+	include compilers_runtime
 	include admin_tools
 	admin_tools::user{"uriviba":
 		key => 'AAAAB3NzaC1yc2EAAAADAQABAAABAQCungLuYMIsB7RX3iKVabIWUjW5gmMmtgt7L3Q70O5BHJWrxKjx/ejnIoRvsrd3FdMQSdOKA9NmPFN+ihx1GUvkR8ekKJg4YOgnI5YiUZUs9+clfNB3SfvpR2cpzAmmzIZvngEYPsA3wGTbn4XYDEZZkmFU73+DccYI9pMh4jITieleYpjspMIyQ4F3cieqGvCAttf0yVArg4Te0vQthATuzXpj9KV3R7lsDax7kt3g1GgBbeyPER4xLt/ntGGGvZS4uI78GVewmZg+mqPq5nQku7cyRk1nHD6RL/l7L3yYtEUcAZG1i23v/zm5tGULQiVGp0u6iHpgBksWoDYtfDHJ'
@@ -23,7 +15,7 @@ node default {
 	include all
 }
 node 'xubuntu-1404' {
-	test{"prova":}
+	include all
 }
 node 'laptop' {
 	include all

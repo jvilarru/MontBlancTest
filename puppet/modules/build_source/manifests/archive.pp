@@ -14,7 +14,7 @@ define build_source::archive(
 	$dest="/usr/src/$title", 
 	$creates='configure',
 ) {
-	require stdlib
+	include stdlib
 	ensure_resource('file','/usr/local/bin/extract.pl',{'ensure' => 'file','owner'  => 'root','group'  => 'root', 'mode'   => '755','source' => "puppet:///modules/build_source/extract.pl"})
 	$filename = inline_template('<%= File.basename(@url) %>')
 	Exec {
@@ -22,8 +22,8 @@ define build_source::archive(
 		timeout => $timeout,
 		path    => '/usr/bin:/bin',
 	}
-	$pathComplet = getPaths($dest)
-	ensure_resource('file',$pathComplet,{'ensure' => 'directory','owner' => 'root', 'group' => 'root'})
+	#	$pathComplet = getPaths($dest)
+	ensure_resource('file',$dest,{'ensure' => 'directory','owner' => 'root', 'group' => 'root'})
 	
 	if ($url =~ /^http(s)?:\/\// or $url =~ /^ftp:\/\//) {
 		exec { "Download $title":
@@ -46,6 +46,6 @@ define build_source::archive(
        		command => "/usr/local/bin/extract.pl /tmp/$filename",
 		cwd     => "$dest",
 		creates => "$dest/$creates",
-		require => [File['/usr/local/bin/extract.pl'],File[$pathComplet]]
+		require => [File['/usr/local/bin/extract.pl'],File[$dest]]
 	}
 }

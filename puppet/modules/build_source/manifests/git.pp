@@ -8,6 +8,7 @@ define build_source::git(
 	$url, 
 	$dest = "/usr/src/$title", 
 ) {
+	include stdlib
 	ensure_resource('secure_package','git',{})
 	Exec {
 		user    => 'root',
