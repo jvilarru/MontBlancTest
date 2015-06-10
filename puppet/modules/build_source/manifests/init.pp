@@ -38,6 +38,8 @@
 #   module_conflicts => (optional) Array of the modulename that 	#
 #			conflict with this module			#
 #   module_desc      => (optional) Brief description of this software 	#
+#   module_extra_vars=> (optional) A hash maps containing any extra 	#
+#			variables that need to be defined		#
 #########################################################################
 define build_source (	$type = 'configure',
 			$url,
@@ -60,6 +62,7 @@ define build_source (	$type = 'configure',
 			$module_app_name = '',
 			$module_conflicts ='',
 			$module_desc = '',
+			$module_extra_vars = '',
 ){
 	include stdlib
 	if($srcDest == ''){
@@ -203,15 +206,21 @@ define build_source (	$type = 'configure',
 			} else {
 				$mod_desc = ''
 			}
+			if($module_extra_vars != ''){
+				$mod_extra_vars = $module_extra_vars
+			} else {
+				$mod_extra_vars = ''
+			}
 			environment_modules::generate_module{$title:
-				type      => $module_type,
-				version   => $version,
-				prefix    => $destFolder,
-				modname   => $mod_modname,
-				app_name  => $mod_app_name,
-				conflicts => $mod_conflicts,
-				desc      => $mod_desc,
-				require   => $reqInst,
+				type       => $module_type,
+				version    => $version,
+				prefix     => $destFolder,
+				modname    => $mod_modname,
+				app_name   => $mod_app_name,
+				conflicts  => $mod_conflicts,
+				desc       => $mod_desc,
+				extra_vars => $mod_extra_vars,
+				require    => $reqInst,
 			}
 		}
 	}

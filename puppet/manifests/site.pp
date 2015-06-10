@@ -1,5 +1,11 @@
 class all {
 	include apt
+	include ntp
+	include puppet
+	#class{"nfs":
+	#	server      => '10.0.2.15',
+	#	mountPoints => {'/tmp/ma' => '/tmp/a','/tmp/mb' => '/tmp/b'},
+	#}
 	include scientific_libraries
 	include tools
 	include compilers_runtime

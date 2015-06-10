@@ -97,7 +97,7 @@ class slurm_client ( $basename,
 		group     => 'root',
 		content   => template("$module_name/ldconfig.erb"),
 		path      => "/etc/ld.so.conf.d/slurm.conf";
-		trigger => Exec["$module_name exec ldconfig"]; 
+		notify    => Exec["$module_name exec ldconfig"]; 
 	"$module_name slurm configuration file":
 		ensure  => file,
 		path    => "$sysconfdir/slurm.conf",

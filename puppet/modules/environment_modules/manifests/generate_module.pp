@@ -8,6 +8,8 @@
 #   conflicts => (defaults = $title) Array containing all the conflicts of 	#
 #		 the modulefile							#
 #   desc      => (optional) application name					#
+#   extra_vars=> (optional) A hash map with any optional variables, the keys are#
+#		 the variable name and the value the value of themselves	#
 #   version   => (defaults = 'default') version of the application		#
 #################################################################################
 define environment_modules::generate_module(	$type,
@@ -16,6 +18,7 @@ define environment_modules::generate_module(	$type,
 					$app_name = $title,
 					$conflicts= [$title],
 					$desc='',
+					$extra_vars = '',
 					$version='default'
 ){
 	require stdlib
