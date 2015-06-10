@@ -6,7 +6,9 @@ class slurm_client ( $basename,
 			$accounting_hostname,
 			$controller_hostname,
 			$controller_ip_address,
-			$slurmdbd_pass
+			$slurmdbd_pass,
+			$root_db_user,
+			$root_db_pass
 ) {
 	if ( $server != 'no' ) {
 		$dependences = ["munge","libmunge-dev","libcr-dev","libpam0g-dev","libssl-dev","openssl","libmysqld-dev","mysql-common","pkg-config","libxml2-dev","hwloc","libmysqlclient-dev","libhwloc-dev","mysql-client","mysql-server"]
@@ -143,7 +145,7 @@ class slurm_client ( $basename,
 		}
 
 		# TODO: put the public key somewhere the client can get it
-		# TODO: create slurm user on the DB, should have root access to mysql
+		# create slurm user on the DB, should have root access to mysql
 		exec { "$module_name init slurm db":
 			command => "mysql --user=\"$root_db_user\" --pass=\"$root_db_pass\" --host=localhost --execute=\"grant all on slurm_acct_db.* TO 'slurm'@'localhost' identified by '$slurmdbd_pass' with grant option;",
 			# FIX: PERO ESTO NO CREA NADA... SE EJECUTARA CADA VEZ Y NO ES DESEABLE
